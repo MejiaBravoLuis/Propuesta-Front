@@ -1,9 +1,10 @@
-import { Navigate } from "react-router-dom";
-import { Auth } from "./page/auth/auth";
+import { DashboardPage } from './pages/dashboard';
+import { Auth } from './pages/auth';
+
+
 
 const routes = [
-  { path: '/auth', element: <Auth/> },
-  { path: '/', element: <Navigate to={'/auth'} /> }
-]
-
+    { path: '/auth', element: <Auth /> },
+    { path: '/*', element: <PrivateRoute><DashboardPage /></PrivateRoute> }
+  ];
 export default routes;
