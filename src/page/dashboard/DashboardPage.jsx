@@ -6,11 +6,14 @@ export const DashboardPage = () => {
   const [showWelcomeVideo, setShowWelcomeVideo] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
+  const [textAnimation, setTextAnimation] = useState(false);
 
   useEffect(() => {
     if (!sessionStorage.getItem('welcomeVideoViewed')) {
       setShowWelcomeVideo(true);
     }
+    // Activar animaciones después de que el componente se monta
+    setTimeout(() => setTextAnimation(true), 300);
   }, []);
 
   const handleSkipWelcomeVideo = () => {
@@ -38,10 +41,14 @@ export const DashboardPage = () => {
           />
           <div className="video-controls">
             <button className="mute-button" onClick={toggleMute}>
-              {isMuted ? '🔇 Activar sonido' : '🔊 Sonido activado'}
+              {isMuted ? (
+                <span className="icon-text">🔇 <span className="button-text">Activar sonido</span></span>
+              ) : (
+                <span className="icon-text">🔊 <span className="button-text">Sonido activado</span></span>
+              )}
             </button>
             <button className="skip-welcome-button" onClick={handleSkipWelcomeVideo}>
-              Saltar Introducción
+              <span className="button-text">Saltar Introducción</span>
             </button>
           </div>
         </div>
@@ -49,28 +56,57 @@ export const DashboardPage = () => {
 
       <div className="dashboard-wrapper">
         <div className="sidebar">
-          <FloatingDockDemo />
+          <div className="sidebar-content">
+            <FloatingDockDemo />
+          </div>
         </div>
 
-          {/* Video destacado - 1/5 de la pantalla */}
-          <div className="featured-video-container">
+        <div className="main-content">
+          {/* Video destacado con mensaje de bienvenida superpuesto */}
+          <div className="top-video-container">
             <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&controls=0"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&controls=0&playlist=dQw4w9WgXcQ"
               title="Video destacado"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="featured-video"
             />
+            <div className={`welcome-message-overlay ${textAnimation ? 'animated' : ''}`}>
+              <h1 className="dashboard-title">
+                <span className="title-line">Bienvenido al</span>
+                <span className="title-line highlight">Panel de Control</span>
+              </h1>
+              <div className="animated-subtitle">
+                <p className="dashboard-subtitle">
+                  <span className="subtitle-text">Selecciona una opción del menú para comenzar</span>
+                  <span className="typing-cursor">|</span>
+                </p>
+              </div>
+            </div>
           </div>
-                  <div className="dashboard-main">
 
-          {/* Contenido del dashboard */}
-          <div className="dashboard-content-area">
-            <h1 className="dashboard-title">Bienvenido al Panel</h1>
-            <p className="dashboard-subtitle">
-              Selecciona una opción del menú para comenzar.
-            </p>
+          {/* Panel inferior */}
+          <div className="bottom-panel">
+            <div className="dashboard-content-area">
+              <div className="info-cards">
+                <div className="info-card card-entrance">
+                  <div className="card-icon">📊</div>
+                  <h3 className="card-title">Analíticas</h3>
+                  <p className="card-text">Visualiza tus métricas clave</p>
+                </div>
+                <div className="info-card card-entrance" style={{ animationDelay: '0.2s' }}>
+                  <div className="card-icon">⚙️</div>
+                  <h3 className="card-title">Configuración</h3>
+                  <p className="card-text">Personaliza tu experiencia</p>
+                </div>
+                <div className="info-card card-entrance" style={{ animationDelay: '0.4s' }}>
+                  <div className="card-icon">📈</div>
+                  <h3 className="card-title">Reportes</h3>
+                  <p className="card-text">Genera informes detallados</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
