@@ -1,0 +1,56 @@
+import React from "react";
+import { Modal, Avatar, Typography, Space, Button, Divider } from "antd";
+import ProfileImage from '../assets/img/ye.png'
+
+
+const { Text, Title } = Typography;
+
+export const UserProfileModal = ({ visible, onClose, user }) => {
+  return (
+    <Modal
+      title="Información de Perfil"
+      open={visible}
+      onCancel={onClose}
+      footer={[
+        <Button key="close" type="primary" onClick={onClose}>
+          Cerrar
+        </Button>,
+      ]}
+      centered
+    >
+      {user ? (
+        <Space
+          direction="vertical"
+          size="large"
+          style={{ width: "100%", alignItems: "center" }}
+        >
+          <Avatar
+            size={200}
+            src={ProfileImage}
+            alt="Imagen de perfil"
+          />
+
+          <Title level={4} style={{ marginBottom: 0 }}>
+            {user.username}
+          </Title>
+
+          <Divider style={{ margin: "8px 0" }} />
+
+          <Space direction="vertical" size="small" style={{ width: "100%" }}>
+            <Text>
+              <b>Rol:</b> {user.role}
+            </Text>
+            {user.email && (
+              <Text>
+                <b>Email:</b> {user.email}
+              </Text>
+            )}
+            {/* Puedes agregar más campos aquí si los tienes */}
+          </Space>
+        </Space>
+      ) : (
+        <Text>No hay información disponible</Text>
+      )}
+    </Modal>
+  );
+};

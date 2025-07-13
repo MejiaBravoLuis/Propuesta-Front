@@ -18,9 +18,10 @@ body {
 
 .dashboard-wrapper {
   display: flex;
-  height: 100vh;
+  min-height: 100vh; /* mejor que height: 100vh */
   width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto; /* permite scroll vertical */
 }
 
 .sidebar {
@@ -55,7 +56,8 @@ body {
 .main-content {
   margin-left: 80px;
   width: calc(100% - 80px);
-  height: 100vh;
+  /* height: 100vh; */ /* elimina esta */
+  min-height: 100vh; /* o déjalo sin altura fija */
   display: flex;
   flex-direction: column;
 }
@@ -183,16 +185,37 @@ body {
 }
 
 .dashboard-content-area {
-  width: 90%;
-  max-width: 1200px;
-  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.cards-and-stepper {
+  display: flex;
+  gap: 32px;
+  flex-wrap: nowrap; /* evita que baje el stepper debajo */
+  align-items: flex-start;
+  justify-content: flex-start; /* alinea al inicio */
+  padding: 20px;
+  max-width: 1200px; /* opcional */
+  margin: 0 auto; /* centra horizontalmente */
 }
 
 .info-cards {
   display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+  gap: 20px;
+  flex-wrap: nowrap;
+  justify-content: flex-start; /* mejor alineado a la izquierda */
+  /* width: 100%;  <-- quita esta línea */
+  flex: 2; /* que ocupe más espacio que el stepper */
+}
+
+.stepper-container {
+  flex: 1;
+  min-width: 300px;
+  margin-top: 80px; /* espacio extra arriba */
 }
 
 .info-card {
@@ -425,4 +448,22 @@ body {
   .info-card {
     width: 100%;
   }
+}
+
+.profile-avatar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
 }
