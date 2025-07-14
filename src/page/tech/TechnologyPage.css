@@ -1,0 +1,60 @@
+/* Estructura general */
+.dashboard-wrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+  overflow: hidden;
+}
+
+/* Contenido principal */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  margin-left: 80px; /* Ajuste para el ancho del Sidebar */
+  overflow-y: auto;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Estilo para el título */
+.main-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+/* Avatar de perfil (reutilizado del dashboard) */
+.profile-avatar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Scroll personalizado (opcional) */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+.main-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+.main-content::-webkit-scrollbar-track {
+  background: transparent;
+}

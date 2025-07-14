@@ -51,6 +51,10 @@ export default function Sidebar() {
     navigate("/auth");
   };
 
+  const handleEducagt = () => {
+    navigate("/dashboard")
+  }
+
   return (
     <motion.aside
       animate={{ width: isCollapsed ? 60 : 200 }}
@@ -65,8 +69,10 @@ export default function Sidebar() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
+              onClick={handleEducagt}
+              
             >
-              Menú
+              EducaGT
             </motion.h4>
           )}
         </AnimatePresence>
