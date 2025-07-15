@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Avatar, Typography, Space, Button, Divider } from "antd";
-import ProfileImage from '../assets/img/ye.png'
-
+import ProfileImage from "../assets/img/ye.png";  // Si el usuario no tiene imagen, usaremos esta predeterminada
 
 const { Text, Title } = Typography;
 
@@ -17,6 +16,8 @@ export const UserProfileModal = ({ visible, onClose, user }) => {
         </Button>,
       ]}
       centered
+      width={300} // Ajustamos el tamaño del modal
+      
     >
       {user ? (
         <Space
@@ -25,20 +26,21 @@ export const UserProfileModal = ({ visible, onClose, user }) => {
           style={{ width: "100%", alignItems: "center" }}
         >
           <Avatar
-            size={200}
-            src={ProfileImage}
+            size={150} // Tamaño de avatar más adecuado
+            src={user?.profileImage || ProfileImage} // Usamos la imagen predeterminada si no tiene avatar
             alt="Imagen de perfil"
+            style={{ marginBottom: 16 }}
           />
 
           <Title level={4} style={{ marginBottom: 0 }}>
-            {user.username}
+            {user.username || "Usuario"}
           </Title>
 
           <Divider style={{ margin: "8px 0" }} />
 
           <Space direction="vertical" size="small" style={{ width: "100%" }}>
             <Text>
-              <b>Rol:</b> {user.role}
+              <b>Rol:</b> {user.role || "No disponible"}
             </Text>
             {user.email && (
               <Text>

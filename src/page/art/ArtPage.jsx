@@ -1,37 +1,36 @@
-import { useState, useEffect } from "react";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import { UserProfileModal } from "../../components/UserProfileModal";
-import ProfileImage from "../../assets/img/ye.png";
-import "./artPage.css"; // Puedes copiar estilos comunes o dejarlo vacío por ahora
+import React, { useEffect } from "react";
+import { Layout, Spin, Alert, Card } from "antd";  // Usamos los componentes de Ant Design
+import { useMaterials } from "../../shared/hooks/useMaterials";  // Importamos el hook
+import { useParams } from 'react-router-dom';  // Para obtener el nombre del curso de la URL
+
+import { Sidebar } from "../../components/Sidebar/Sidebar";  // Sidebar
+import "./artPage.css";  // Estilos específicos de la página de Arte
 
 export const ArtPage = () => {
-  const [user, setUser] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const { courseName } = useParams();  // Obtenemos el nombre del curso desde los parámetros de la URL
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  // Usamos el hook para obtener los detalles del curso
+  const { course, loading, error } = useMaterials(courseName);
 
   return (
-    <div className="art-page-wrapper">
-      <Sidebar />
-      <div className="art-main-content">
-        <img
-          src={ProfileImage}
-          alt="Perfil"
-          onClick={() => setModalVisible(true)}
-          className="profile-avatar"
-        />
-        <UserProfileModal
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          user={user}
-        />
-        {/* Aquí puedes seguir construyendo la página */}
+    <Layout>
+      <div className="course-page-wrapper">
+        <Sidebar />
+        <div className="course-main-content">
+          {loading ? (
+            <Spin size="large" />  // Muestra el spinner mientras carga
+          ) : error ? (
+            <Alert message="Error" description={error} type="error" />  // Muestra un error si ocurre
+          ) : (
+            <div>
+              <h1>{course.title}</h1>
+              <p>{course.description}</p>
+              <p><strong>Categoria:</strong> {course.category.name}</p>
+              <p><strong>Creado por:</strong> {course.createdBy.username}</p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };

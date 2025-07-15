@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { Layout, Menu } from "antd";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import IconArte from "../../assets/icons/arte.png";
 import IconTecno from "../../assets/icons/tecnologia.png";
@@ -12,127 +13,80 @@ import IconLengua from "../../assets/icons/lenguaje.png";
 import IconStats from "../../assets/icons/stats.png";
 import IconLogout from "../../assets/icons/logout.png";
 
-import "./sidebar.css";
+const { Sider } = Layout;
 
-const links = [
-  { title: "Artes", icon: IconArte, to: "/arte" },
-  { title: "Tecnología", icon: IconTecno, to: "/tecno" },
-  { title: "Biología", icon: IconBio, to: "/biolo" },
-  { title: "Matemáticas", icon: IconMate, to: "/math" },
-  { title: "CienciaN", icon: IconCiencias, to: "/cn" },
-  { title: "Ciencias Sociales", icon: IconSociales, to: "/cs" },
-  { title: "Lenguaje", icon: IconLengua, to: "/language" },
-  { title: "Mi Progreso", icon: IconStats, to: "/progress" },
+const menuItems = [
+  { key: "arte", label: "Artes", icon: <img src={IconArte} alt="" style={{ width: 20 }} /> },
+  { key: "tecno", label: "Tecnología", icon: <img src={IconTecno} alt="" style={{ width: 20 }} /> },
+  { key: "biolo", label: "Biología", icon: <img src={IconBio} alt="" style={{ width: 20 }} /> },
+  { key: "math", label: "Matemáticas", icon: <img src={IconMate} alt="" style={{ width: 20 }} /> },
+  { key: "cn", label: "CienciaN", icon: <img src={IconCiencias} alt="" style={{ width: 20 }} /> },
+  { key: "cs", label: "Ciencias Sociales", icon: <img src={IconSociales} alt="" style={{ width: 20 }} /> },
+  { key: "language", label: "Lenguaje", icon: <img src={IconLengua} alt="" style={{ width: 20 }} /> },
+  { key: "progress", label: "Mi Progreso", icon: <img src={IconStats} alt="" style={{ width: 20 }} /> },
+  { key: "logout", label: "Cerrar sesión", icon: <img src={IconLogout} alt="" style={{ width: 20 }} /> },
 ];
 
-const HamburgerIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="3" y1="7" x2="21" y2="7" />
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="17" x2="21" y2="17" />
-  </svg>
-);
+export const Sidebar = () => {
+  const navigate = useNavigate();  // Usamos el hook de react-router-dom para la navegación
 
-export default function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/auth");
+  const onMenuClick = ({ key }) => {
+    if (key === "logout") {
+      localStorage.clear();
+      navigate("/auth"); // Redirige a la página de autenticación al cerrar sesión
+      return;
+    }
+
+    if (key === "edu") {  // Si el usuario hace clic en "EducaGT", lo redirigimos al Dashboard
+      navigate("/dashboard");
+      return;
+    }
+
+    navigate(`/${key}`); // Para todas las otras rutas
   };
 
-  const handleEducagt = () => {
-    navigate("/dashboard")
-  }
-
   return (
-    <motion.aside
-      animate={{ width: isCollapsed ? 60 : 200 }}
-      transition={{ duration: 0.3 }}
-      className="sidebar"
-    >
-      <div className="sidebar-toggle">
-        <AnimatePresence>
-          {!isCollapsed && (
-            <motion.h4
-              className="sidebar-title"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              onClick={handleEducagt}
-              
-            >
-              EducaGT
-            </motion.h4>
-          )}
-        </AnimatePresence>
-
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="toggle-button"
-          aria-label="Toggle sidebar"
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+        width={200}
+        style={{
+          position: "fixed", // Fija la sidebar en la pantalla
+          top: 0,
+          left: 0,
+          height: "100vh", // Ocupa toda la altura de la pantalla
+          background: "#001529",
+          zIndex: 10, // Asegura que esté encima del contenido
+        }}
+      >
+        <div
+          style={{
+            height: 64,
+            color: "white",
+            textAlign: "center",
+            lineHeight: "64px",
+            fontWeight: "bold",
+            fontSize: 28,
+            cursor: "pointer", // Hace clic en "EducaGT" para redirigir al Dashboard
+          }}
+          onClick={() => onMenuClick({ key: "edu" })}  // Aquí manejamos el clic en el título
         >
-          <HamburgerIcon />
-        </button>
-      </div>
+          {!collapsed ? "EducaGT" : "EGT"}
+        </div>
 
-      <ul className="sidebar-list">
-        {links.map(({ title, icon, to }) => (
-          <NavLink
-            key={title}
-            to={to}
-            title={title}
-            className={({ isActive }) =>
-              `sidebar-item ${isActive ? "active" : ""}`
-            }
-          >
-            <img src={icon} alt={title} className="sidebar-icon" />
-            <AnimatePresence>
-              {!isCollapsed && (
-                <motion.span
-                  className="sidebar-label"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                >
-                  {title}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </NavLink>
-        ))}
-
-        <li
-          className="sidebar-item logout-item"
-          onClick={handleLogout}
-          title="Cerrar sesión"
-          style={{ cursor: "pointer" }}
-        >
-          <img src={IconLogout} alt="Cerrar sesión" className="sidebar-icon" />
-          <AnimatePresence>
-            {!isCollapsed && (
-              <motion.span
-                className="sidebar-label"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-              >
-                Cerrar sesión
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </li>
-      </ul>
-    </motion.aside>
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={["arte"]}
+          onClick={onMenuClick}
+          items={menuItems}
+          style={{ marginTop: 20 }}
+        />
+      </Sider>
+    </motion.div>
   );
-}
+};

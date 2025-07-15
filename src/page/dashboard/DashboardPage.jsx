@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FloatingDockDemo } from "../../components/FloatingDockDemo";
 import { UserProfileModal } from "../../components/UserProfileModal";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import {Sidebar} from "../../components/Sidebar/Sidebar";
 import ProfileImage from "../../assets/img/ye.png";
 import Stepper, { Step } from "../../components/utils/Stepper";
 import "./dashboardPage.css";

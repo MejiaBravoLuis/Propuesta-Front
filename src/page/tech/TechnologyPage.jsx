@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import {Sidebar} from "../../components/Sidebar/Sidebar";
 import { UserProfileModal } from "../../components/UserProfileModal";
 import ProfileImage from "../../assets/img/ye.png";
 import './TechnologyPage.css'

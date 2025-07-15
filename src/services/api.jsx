@@ -37,4 +37,14 @@ export const register = async (data) => {
   }
 };
 
+export const getCourseByName = async (courseName) => {
+  try {
+    const response = await apiClient.get(`/course/course/${courseName}`);  // Usamos GET y pasamos el nombre del curso en la URL
+    return response.data;  // Devuelve la información del curso
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    throw error;
+  }
+};
+
 export default apiClient;
