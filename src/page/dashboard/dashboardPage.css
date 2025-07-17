@@ -205,17 +205,16 @@ body {
 
 .info-cards {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   flex-wrap: nowrap;
   justify-content: flex-start; /* mejor alineado a la izquierda */
-  /* width: 100%;  <-- quita esta línea */
   flex: 2; /* que ocupe más espacio que el stepper */
 }
 
 .stepper-container {
   flex: 1;
   min-width: 300px;
-  margin-top: 280px; /* espacio extra arriba */
+  margin-top: 260px; /* espacio extra arriba */
 }
 
 .info-card {
@@ -466,4 +465,19 @@ body {
 
 .profile-avatar:hover {
   transform: scale(1.05);
+}
+
+.student-message {
+  font-size: 2rem;
+  margin-top: -90px;
+  padding: 1px;
+  background-color: transparent;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.student-message h2 {
+  font-size: 2rem;
+  color: #ffffff;
+  line-height: 1.6;
 }

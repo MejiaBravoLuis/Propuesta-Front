@@ -1,9 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { FloatingDockDemo } from "../../components/FloatingDockDemo";
 import { UserProfileModal } from "../../components/UserProfileModal";
-import {Sidebar} from "../../components/Sidebar/Sidebar";
+import { Sidebar } from "../../components/Sidebar/Sidebar";
 import ProfileImage from "../../assets/img/ye.png";
+import MaestroIcon from "../../assets/icons/libro.png";
+import ConfigIcon from "../../assets/icons/config.png";
+import GraphIcon from "../../assets/icons/graphs.png";
+import ReportIcon from "../../assets/icons/reports.png";
+import { useUserDetails } from "../../shared/hooks/useUserDetails";
 import Stepper, { Step } from "../../components/utils/Stepper";
+import ShinyText from "../../components/animations/text/ShinyText";
 import "./dashboardPage.css";
 
 export const DashboardPage = () => {
@@ -14,6 +20,8 @@ export const DashboardPage = () => {
 
   const [user, setUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const { role } = useUserDetails();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -26,7 +34,6 @@ export const DashboardPage = () => {
     if (!sessionStorage.getItem("welcomeVideoViewed")) {
       setShowWelcomeVideo(true);
     }
-    // Activar animaciones después de que el componente se monta
     setTimeout(() => setTextAnimation(true), 300);
   }, []);
 
@@ -41,7 +48,6 @@ export const DashboardPage = () => {
 
   return (
     <div className="dashboard-page-content">
-      {/* Video de bienvenida en pantalla completa */}
       {showWelcomeVideo && (
         <div className="welcome-video-overlay">
           <iframe
@@ -81,7 +87,6 @@ export const DashboardPage = () => {
         <Sidebar />
 
         <div className="main-content">
-          {/* Video destacado con mensaje de bienvenida superpuesto */}
           <div className="top-video-container">
             <iframe
               src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&controls=0&playlist=dQw4w9WgXcQ"
@@ -110,8 +115,7 @@ export const DashboardPage = () => {
               </div>
             </div>
           </div>
-          
-          {/* Panel inferior */}
+
           <div className="bottom-panel">
             <div className="dashboard-content-area">
               <div className="cards-and-stepper">
@@ -129,55 +133,65 @@ export const DashboardPage = () => {
                   >
                     <Step>
                       <h2>¡Bienvenido a EducaGT!</h2>
-                      <p>Para nosotros es un placer tenerte aquí, este es un pequeño
-                        tutorial para que veas el funcionamiento de nuestra plataforma!
+                      <p>
+                        Para nosotros es un placer tenerte aquí, este es un
+                        pequeño tutorial para que veas el funcionamiento de
+                        nuestra plataforma!
                       </p>
                     </Step>
                     <Step>
                       <h2>¿Qué es esto?</h2>
-                      <p>En EducaGT queremos que refuerces tus conocimientos con el uso
-                        de diferentes materiales, tutoriales, prácticas y lecciones que 
-                        tomarás a tu gusto.
+                      <p>
+                        En EducaGT queremos que refuerces tus conocimientos con
+                        el uso de diferentes materiales, tutoriales, prácticas y
+                        lecciones que tomarás a tu gusto.
                       </p>
                     </Step>
                     <Step>
                       <h2>¿Qué hago aquí?</h2>
-                      <p>Con nosotros podrás aprender más a cerca de tus materias favoritas
-                        tomando lecciones de aprendizaje personalizadas a tu gusto y propio 
-                        ritmo.
+                      <p>
+                        Con nosotros podrás aprender más a cerca de tus materias
+                        favoritas tomando lecciones de aprendizaje
+                        personalizadas a tu gusto y propio ritmo.
                       </p>
                     </Step>
                     <Step>
                       <h2>Para maestros</h2>
-                      <p>Si eres profesor de alguna institución, aquí podrás publicar tus clases,
-                        materiales, notas de clase, impartir cursos y enseñar en general en las materias
-                        que más te gusten.
+                      <p>
+                        Si eres profesor de alguna institución, aquí podrás
+                        publicar tus clases, materiales, notas de clase,
+                        impartir cursos y enseñar en general en las materias que
+                        más te gusten.
                       </p>
                     </Step>
                   </Stepper>
-                  <div className="info-cards">
-                  <div className="info-card card-entrance">
-                    <div className="card-icon">📊</div>
-                    <h3 className="card-title">Analíticas</h3>
-                    <p className="card-text">Visualiza tus métricas clave</p>
+
+                  <div className="student-message">
+                    <ShinyText
+                      text="En EducaGT buscamos crear una red de personas que busquen superarse en las materias que notan una dificultad, este sitio es especial para aprender a tu propio ritmo y gusto. Aquí podrás encontrar material de información para mejorar tu aprendizaje en los temas que más te cuesten, si eres profesor y quieres ayudar a la comunidad de estudiantes puedes publicar tu material para ayudar a mejorar y crecer nuestra plataforma."
+                      disabled={false}
+                      speed={3}
+                      className="custom-class"
+                    />
                   </div>
-                  <div
-                    className="info-card card-entrance"
-                    style={{ animationDelay: "0.2s" }}
-                  >
-                    <div className="card-icon">⚙️</div>
-                    <h3 className="card-title">Configuración</h3>
-                    <p className="card-text">Personaliza tu experiencia</p>
-                  </div>
-                  <div
-                    className="info-card card-entrance"
-                    style={{ animationDelay: "0.4s" }}
-                  >
-                    <div className="card-icon">📈</div>
-                    <h3 className="card-title">Reportes</h3>
-                    <p className="card-text">Genera informes detallados</p>
-                  </div>
-                </div>
+
+                  {role === "STUDENT" && (
+                    <div className="student-message">
+                      <ShinyText
+                        text=" En EducaGT buscamos crear una red de personas que
+                        busquen superarse en las materias que notan una
+                        dificultad, este sitio es especial para aprender a tu
+                        propio ritmo y gusto. Aquí podrás encontrar material de
+                        información para mejorar tu aprendizaje en los temas que
+                        más te cuesten, si eres profesor y quieres ayudar a la
+                        comunidad de estudiantes puedes publicar tu material
+                        para ayudar a mejorar y crecer nuestra plataforma."
+                        disabled={false}
+                        speed={3}
+                        className="custom-class"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

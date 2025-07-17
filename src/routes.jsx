@@ -9,6 +9,9 @@ import { NaturalSciencesPage } from "./page/cience/NaturalSciencesPage";
 import { SocialSciencesPage } from "./page/socials/SocialSciencesPage";
 import { LanguagePage } from "./page/language/LanguagePage";
 import { ProgressPage } from "./page/progress/ProgressPage";
+import { CoursePage } from "./page/courses/CoursePage";
+import { ForumPage } from "./page/foro/ForumPage";
+import { MaterialPage } from "./page/material/MaterialPage";
 
 const routes = [
   
@@ -21,7 +24,10 @@ const routes = [
   { path: '/cn', element: <NaturalSciencesPage/> },
   { path: '/cs', element: <SocialSciencesPage/> },
   { path: '/language', element: <LanguagePage/> },
-  { path: '/progress', element: <ProgressPage/> },
+  { path: '/progreso', element: <ProgressPage/> },
+  { path: '/cursos', element: <CoursePage/> },
+  { path: '/foros', element: <ForumPage/> },
+  { path: '/material', element: <MaterialPage/> },
   { path: '/', element: <Navigate to={'/auth'} /> }
 ]
 
