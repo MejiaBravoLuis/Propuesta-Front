@@ -12,6 +12,7 @@ import { ProgressPage } from "./page/progress/ProgressPage";
 import { CoursePage } from "./page/courses/CoursePage";
 import { ForumPage } from "./page/foro/ForumPage";
 import { MaterialPage } from "./page/material/MaterialPage";
+import { CategoryPage } from "./page/category/CategoryPage";
 
 const routes = [
   
@@ -28,6 +29,7 @@ const routes = [
   { path: '/cursos', element: <CoursePage/> },
   { path: '/foros', element: <ForumPage/> },
   { path: '/material', element: <MaterialPage/> },
+  { path: '/category', element: <CategoryPage/> },
   { path: '/', element: <Navigate to={'/auth'} /> }
 ]
 

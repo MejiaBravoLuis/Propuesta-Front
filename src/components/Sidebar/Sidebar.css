@@ -48,7 +48,7 @@
   border-radius: 0.4rem;
   color: #ccc;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: background 0.2s;  
 }
 
 .sidebar-item:hover,

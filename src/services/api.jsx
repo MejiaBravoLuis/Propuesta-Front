@@ -37,10 +37,64 @@ export const register = async (data) => {
   }
 };
 
+export const getAllCategories = async () => {
+  try {
+    const response = await apiClient.get("category");
+    return response.data; 
+  } catch (e) {
+    console.error("Error fetching categories:", e);
+    return { error: true, e };
+  }
+};
+
+// Crear una nueva categoría
+export const createCategory = async (data) => {
+  try {
+    const response = await apiClient.post("category", data);
+    return response.data; 
+  } catch (e) {
+    console.error("Error creating category:", e);
+    return { error: true, e };
+  }
+};
+
+// Obtener una categoría por ID
+export const getCategoryById = async (id) => {
+  try {
+    const response = await apiClient.get(`category/${id}`);
+    return response.data;
+  } catch (e) {
+    console.error(`Error fetching category ${id}`, e);
+    return { error: true, e };
+  }
+};
+
+// Actualizar una categoría
+export const updateCategory = async (id, data) => {
+  try {
+    const response = await apiClient.put(`category/${id}`, data);
+    return response.data;
+  } catch (e) {
+    console.error(`Error updating category ${id}`, e);
+    return { error: true, e };
+  }
+};
+
+// Eliminar una categoría
+export const deleteCategory = async (id) => {
+  try {
+    const response = await apiClient.delete(`category/${id}`);
+    return response.data;
+  } catch (e) {
+    console.error(`Error deleting category ${id}`, e);
+    return { error: true, e };
+  }
+};
+
 export const getAllCourses = async () => {
   try {
     const response = await apiClient.get("course");
-    return response.data; // { success, courses }
+    return response.data;
   } catch (e) {
     console.error("Error fetching courses", e);
     return { error: true, e };
@@ -50,7 +104,7 @@ export const getAllCourses = async () => {
 export const getCourseById = async (id) => {
   try {
     const response = await apiClient.get(`course/${id}`);
-    return response.data; // { success, course }
+    return response.data;
   } catch (e) {
     console.error(`Error fetching course ${id}`, e);
     return { error: true, e };
@@ -60,7 +114,7 @@ export const getCourseById = async (id) => {
 export const createCourse = async (data) => {
   try {
     const response = await apiClient.post("course", data);
-    return response.data; // { success, message, course }
+    return response.data;
   } catch (e) {
     console.error("Error creating course", e);
     return { error: true, e };
@@ -70,7 +124,7 @@ export const createCourse = async (data) => {
 export const updateCourse = async (id, data) => {
   try {
     const response = await apiClient.put(`course/${id}`, data);
-    return response.data; // { success, message, course }
+    return response.data;
   } catch (e) {
     console.error(`Error updating course ${id}`, e);
     return { error: true, e };
@@ -80,7 +134,7 @@ export const updateCourse = async (id, data) => {
 export const deleteCourse = async (id) => {
   try {
     const response = await apiClient.delete(`course/${id}`);
-    return response.data; // { success, message }
+    return response.data;
   } catch (e) {
     console.error(`Error deleting course ${id}`, e);
     return { error: true, e };
