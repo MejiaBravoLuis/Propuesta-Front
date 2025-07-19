@@ -3,10 +3,7 @@ import { FloatingDockDemo } from "../../components/FloatingDockDemo";
 import { UserProfileModal } from "../../components/UserProfileModal";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 import ProfileImage from "../../assets/img/ye.png";
-import MaestroIcon from "../../assets/icons/libro.png";
-import ConfigIcon from "../../assets/icons/config.png";
-import GraphIcon from "../../assets/icons/graphs.png";
-import ReportIcon from "../../assets/icons/reports.png";
+import MagicBento from "../../components/bento/MagicBento";
 import { useUserDetails } from "../../shared/hooks/useUserDetails";
 import Stepper, { Step } from "../../components/utils/Stepper";
 import ShinyText from "../../components/animations/text/ShinyText";
@@ -174,6 +171,19 @@ export const DashboardPage = () => {
                       className="custom-class"
                     />
                   </div>
+
+                  <MagicBento
+                    textAutoHide={true}
+                    enableStars={true}
+                    enableSpotlight={true}
+                    enableBorderGlow={true}
+                    enableTilt={true}
+                    enableMagnetism={true}
+                    clickEffect={true}
+                    spotlightRadius={300}
+                    particleCount={12}
+                    glowColor="132, 0, 255"
+                  />
 
                   {role === "STUDENT" && (
                     <div className="student-message">

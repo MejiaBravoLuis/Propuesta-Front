@@ -18,6 +18,7 @@
     "axios": "^1.10.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.20.5",
+    "gsap": "^3.13.0",
     "motion": "^12.22.0",
     "motion-react": "^0.15.0-alpha.1",
     "ogl": "^1.0.11",

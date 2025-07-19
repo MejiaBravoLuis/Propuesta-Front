@@ -68,17 +68,24 @@ export const useForums = () => {
   };
 
   const deleteExistingForum = async (id) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await deleteForum(id);
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await deleteForum(id); // Llamar a la API de eliminación
+    if (res.success) {  // Verificar si la respuesta es exitosa
       setForums((prev) => prev.filter((f) => f._id !== id));
-    } catch (err) {
-      setError(err.message || "Error deleting forum");
-    } finally {
-      setLoading(false);
+      return true;
+    } else {
+      setError(res.message || "Error al eliminar el foro");
+      return false;
     }
-  };
+  } catch (err) {
+    setError(err.message || "Error al eliminar el foro");
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
 
   return {
     forums,

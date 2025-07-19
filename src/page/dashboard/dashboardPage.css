@@ -214,7 +214,7 @@ body {
 .stepper-container {
   flex: 1;
   min-width: 300px;
-  margin-top: 260px; /* espacio extra arriba */
+  margin-top: 860px; /* espacio extra arriba */
 }
 
 .info-card {

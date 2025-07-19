@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Spin, Alert, Modal, Form, Input, Select, Button } from "antd";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
-import { UserProfileModal } from "../../components/UserProfileModal";
-import ProfileImage from "../../assets/img/ye.png";
-import AddIcon from "../../assets/icons/create.png";  // Imagen de crear
-import EditIcon from "../../assets/icons/edit.png";  // Imagen de editar
-import DeleteIcon from "../../assets/icons/delete.png";  // Imagen de borrar
+import AddIcon from "../../assets/icons/create.png";  
+import EditIcon from "../../assets/icons/edit.png";  
+import DeleteIcon from "../../assets/icons/delete.png";  
 import { useCourse } from "../../shared/hooks/useCourse";
+import { useCategory } from "../../shared/hooks/useCategory"; 
 import { SpotlightCard } from "../../components/cards/SpotligthCard";
 import Dock from "../../components/utils/dock/DockItem";
+import UniversalAlert from "../../components/alerts/UniversalAlert";
 
 export const CoursePage = () => {
   const { courses, loading, error, fetchAllCourses, createCourse, updateCourse, deleteCourse } = useCourse();
+  const { categories, loading: categoriesLoading, error: categoriesError, fetchAllCategories } = useCategory();
 
   const [user, setUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);  // Para manejar el curso seleccionado
-  const [form] = Form.useForm();  // Formulario de Ant Design
+  const [selectedCourse, setSelectedCourse] = useState(null);  
+  const [form] = Form.useForm();  
+  const [alertVisible, setAlertVisible] = useState(false); 
+  const [alertMessage, setAlertMessage] = useState(""); 
+  const [alertTitle, setAlertTitle] = useState(""); 
+  const [alertAction, setAlertAction] = useState(null); 
+  const [errorDetail, setErrorDetail] = useState(""); 
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -27,64 +33,82 @@ export const CoursePage = () => {
   }, []);
 
   useEffect(() => {
-    fetchAllCourses();
+    fetchAllCategories(); 
+    fetchAllCourses(); 
   }, []);
 
-  // Abrir el modal para crear un curso
   const handleCreateClick = () => {
     setModalVisible(true);
+    setSelectedCourse(null); 
   };
 
-  // Cerrar el modal
   const handleCancelModal = () => {
     setModalVisible(false);
     form.resetFields();
   };
 
-  // Manejar el envío del formulario para crear el curso
   const handleSubmit = async (values) => {
     setModalLoading(true);
     const { title, description, category, level } = values;
 
-    const newCourse = {
+    const courseData = {
       title,
       description,
       category,
       level
     };
 
-    const createdCourse = await createCourse(newCourse);
+    let result;
+    if (selectedCourse) {
+      result = await updateCourse(selectedCourse._id, courseData);
+    } else {
+      result = await createCourse(courseData);
+    }
+
     setModalLoading(false);
 
-    if (createdCourse) {
-      setModalVisible(false);  // Cerrar el modal si la creación fue exitosa
+    if (result) {
+      setModalVisible(false);  
       form.resetFields();
+      fetchAllCourses(); 
     }
   };
 
   const handleSelectCourse = (course) => {
     setSelectedCourse(course);
+    setModalVisible(true); 
+    form.setFieldsValue({ 
+      title: course.title,
+      description: course.description,
+      category: course.category._id,
+      level: course.level,
+    });
   };
 
-  // Items del dock, con íconos habilitados
+  const handleDeleteCourse = (courseId) => {
+    setAlertTitle("Eliminar Curso");
+    setAlertMessage("¿Estás seguro de que deseas eliminar este curso?");
+    setAlertAction(() => async () => {
+      const success = await deleteCourse(courseId);
+
+      if (success) {
+        fetchAllCourses();  
+      } else {
+        setErrorDetail("No se pudo eliminar el curso. Por favor, intenta nuevamente.");
+        setAlertTitle("Error al eliminar el curso");
+        setAlertMessage("Hubo un problema al eliminar el curso.");
+        setAlertVisible(true);
+      }
+    });
+    setAlertVisible(true);
+  };
+
   const items = [
     { 
       icon: <img src={AddIcon} alt="Crear" style={{ width: 24, height: 24 }} />,
       label: 'Crear',
       onClick: handleCreateClick,
-      disabled: false  // Siempre habilitado
-    },
-    { 
-      icon: <img src={EditIcon} alt="Editar" style={{ width: 24, height: 24 }} />,
-      label: 'Editar',
-      onClick: () => alert('Editar curso!'),
-      disabled: !selectedCourse  // Solo habilitado si hay un curso seleccionado
-    },
-    { 
-      icon: <img src={DeleteIcon} alt="Eliminar" style={{ width: 24, height: 24 }} />,
-      label: 'Eliminar',
-      onClick: () => alert('Eliminar curso!'),
-      disabled: !selectedCourse  // Solo habilitado si hay un curso seleccionado
+      disabled: false
     },
   ];
 
@@ -92,6 +116,7 @@ export const CoursePage = () => {
     <div className="dashboard-page-content">
       <div className="dashboard-wrapper">
         <Sidebar />
+
         <div className="main-content">
           <div className="bottom-panel">
             <div className="dashboard-content-area">
@@ -114,13 +139,28 @@ export const CoursePage = () => {
                             key={course._id}
                             className="custom-spotlight-card"
                             spotlightColor="rgba(0, 229, 255, 0.2)"
-                            onClick={() => handleSelectCourse(course)}  // Permitir seleccionar un curso
+                            onClick={() => handleSelectCourse(course)}
                           >
                             <h3>{course.title}</h3>
                             <p><strong>Nivel:</strong> {course.level}</p>
                             <p><strong>Categoría:</strong> {course.category?.name || "N/A"}</p>
                             <p><strong>Creado por:</strong> {course.createdBy?.username || "N/A"}</p>
                             <p>{course.description}</p>
+
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                              <img
+                                src={EditIcon}
+                                alt="Editar"
+                                style={{ cursor: "pointer", width: 20, height: 20 }}
+                                onClick={() => handleSelectCourse(course)}
+                              />
+                              <img
+                                src={DeleteIcon}
+                                alt="Eliminar"
+                                style={{ cursor: "pointer", width: 20, height: 20 }}
+                                onClick={() => handleDeleteCourse(course._id)}
+                              />
+                            </div>
                           </SpotlightCard>
                         ))
                       )}
@@ -139,11 +179,17 @@ export const CoursePage = () => {
           magnification={70}
         />
 
-        <UserProfileModal visible={modalVisible} onClose={() => setModalVisible(false)} user={user} />
+        <UniversalAlert
+          visible={alertVisible}
+          onConfirm={alertAction}
+          onCancel={() => setAlertVisible(false)}
+          title={alertTitle}
+          message={alertMessage}
+          errorDetail={errorDetail}  
+        />
 
-        {/* Modal de Crear Curso */}
         <Modal
-          title="Crear nuevo curso"
+          title={selectedCourse ? "Editar Curso" : "Crear nuevo curso"}
           visible={modalVisible}
           onCancel={handleCancelModal}
           footer={null}
@@ -172,9 +218,15 @@ export const CoursePage = () => {
               rules={[{ required: true, message: "Por favor seleccione una categoría" }]}
             >
               <Select>
-                <Select.Option value="1">Categoría 1</Select.Option>
-                <Select.Option value="2">Categoría 2</Select.Option>
-                <Select.Option value="3">Categoría 3</Select.Option>
+                {categoriesLoading ? (
+                  <Select.Option value="loading">Cargando categorías...</Select.Option>
+                ) : (
+                  categories.map((category) => (
+                    <Select.Option key={category._id} value={category._id}>
+                      {category.name}
+                    </Select.Option>
+                  ))
+                )}
               </Select>
             </Form.Item>
 
@@ -193,7 +245,7 @@ export const CoursePage = () => {
 
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={modalLoading}>
-                Crear Curso
+                {selectedCourse ? "Actualizar Curso" : "Crear Curso"}
               </Button>
             </Form.Item>
           </Form>
