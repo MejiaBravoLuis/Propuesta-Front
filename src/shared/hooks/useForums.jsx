@@ -71,14 +71,10 @@ export const useForums = () => {
   setLoading(true);
   setError(null);
   try {
-    const res = await deleteForum(id); // Llamar a la API de eliminación
-    if (res.success) {  // Verificar si la respuesta es exitosa
-      setForums((prev) => prev.filter((f) => f._id !== id));
-      return true;
-    } else {
-      setError(res.message || "Error al eliminar el foro");
-      return false;
-    }
+    // Si esto no lanza, ¡operación exitosa!
+    await deleteForum(id);
+    setForums(prev => prev.filter(f => f._id !== id));
+    return true;
   } catch (err) {
     setError(err.message || "Error al eliminar el foro");
     return false;
