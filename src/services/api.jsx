@@ -239,4 +239,55 @@ export const deleteMaterial = async (id) => {
   }
 };
 
+export const getAllQuizzes = async () => {
+  try {
+    const response = await apiClient.get("quiz");
+    return response.data.quizzes;
+  } catch (error) {
+    console.error("Error fetching quizzes:", error);
+    throw error;
+  }
+};
+
+export const getQuizById = async (id) => {
+  try {
+    const response = await apiClient.get(`quiz/${id}`);
+    return response.data.quiz;
+  } catch (error) {
+    console.error("Error fetching quiz by id:", error);
+    throw error;
+  }
+};
+
+export const createQuiz = async (data) => {
+  try {
+    const response = await apiClient.post("quiz", data);
+    return response.data.quiz;
+  } catch (error) {
+    console.error("Error creating quiz:", error);
+    console.error("Error creating quiz:", error.response?.data || error.message);
+
+    throw error;
+  }
+};
+
+export const updateQuiz = async (id, data) => {
+  try {
+    const response = await apiClient.put(`quiz/${id}`, data);
+    return response.data.quiz;
+  } catch (error) {
+    console.error("Error updating quiz:", error);
+    throw error;
+  }
+};
+
+export const deleteQuiz = async (id) => {
+  try {
+    await apiClient.delete(`quiz/${id}`);
+  } catch (error) {
+    console.error("Error deleting quiz:", error);
+    throw error;
+  }
+};
+
 export default apiClient;

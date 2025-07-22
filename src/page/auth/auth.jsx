@@ -3,7 +3,7 @@ import { Login } from "../../components/Login";
 import { Register } from "../../components/Register";
 import "./styleAuth.css";
 import iconSwitch from "../../assets/icons/1.png";
-import Iridescence from "../../components/animations/background/Iridescene";
+import Galaxy from "../../components/animations/background/galaxy/Galaxy";
 
 export const Auth = () => {
   const containerRef = useRef(null);
@@ -29,12 +29,10 @@ export const Auth = () => {
 
   return (
     <div className="app">
-      <Iridescence
-        color={[1, 1, 1]}
-        mouseReact={true}
-        amplitude={0.1}
-        speed={1.5}
-      />
+      {/* Galaxy background */}
+      <div className="galaxy-background">
+        <Galaxy mouseRepulsion={true} mouseInteraction={true} density={1.5} />
+      </div>
 
       <div className="container" ref={containerRef}>
         <div className="container-form sign-in-container">

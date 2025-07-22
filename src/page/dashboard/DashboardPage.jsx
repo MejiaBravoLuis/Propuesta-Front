@@ -100,12 +100,19 @@ export const DashboardPage = () => {
             >
               <h1 className="dashboard-title">
                 <span className="title-line">Bienvenido al</span>
-                <span className="title-line highlight">Panel de Control</span>
+                <span className="title-line highlight">¿Qué es EducaGT?</span>
               </h1>
               <div className="animated-subtitle">
                 <p className="dashboard-subtitle">
                   <span className="subtitle-text">
-                    Selecciona una opción del menú para comenzar
+                    En EducaGT buscamos crear una red de personas que busquen
+                    superarse en las materias que notan una dificultad, este
+                    sitio es especial para aprender a tu propio ritmo y gusto.
+                    Aquí podrás encontrar material de información para mejorar
+                    tu aprendizaje en los temas que más te cuesten, si eres
+                    profesor y quieres ayudar a la comunidad de estudiantes
+                    puedes publicar tu material para ayudar a mejorar y crecer
+                    nuestra plataforma.
                   </span>
                   <span className="typing-cursor">|</span>
                 </p>
@@ -165,7 +172,7 @@ export const DashboardPage = () => {
 
                   <div className="student-message">
                     <ShinyText
-                      text="En EducaGT buscamos crear una red de personas que busquen superarse en las materias que notan una dificultad, este sitio es especial para aprender a tu propio ritmo y gusto. Aquí podrás encontrar material de información para mejorar tu aprendizaje en los temas que más te cuesten, si eres profesor y quieres ayudar a la comunidad de estudiantes puedes publicar tu material para ayudar a mejorar y crecer nuestra plataforma."
+                      text=""
                       disabled={false}
                       speed={3}
                       className="custom-class"
