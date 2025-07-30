@@ -46,6 +46,8 @@ export const MaterialPage = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const [form] = Form.useForm();
   const wrapperRef = useRef(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   // Cargar user y datos iniciales
   useEffect(() => {
@@ -114,22 +116,77 @@ export const MaterialPage = () => {
   // Dock item
   const dockItems = [
     {
-      icon: <img src={AddIcon} alt="Agregar" style={{ width: 24, height: 24 }} />,
+      icon: (
+        <img src={AddIcon} alt="Agregar" style={{ width: 24, height: 24 }} />
+      ),
       label: "Agregar",
       onClick: openModalForAdd,
     },
   ];
+
+  const filteredMaterials = materials.filter((mat) => {
+    const matchCategory = selectedCategory
+      ? mat.category?._id === selectedCategory
+      : true;
+    const matchCourse = selectedCourse
+      ? mat.course?._id === selectedCourse
+      : true;
+    return matchCategory && matchCourse;
+  });
 
   return (
     <div className="dashboard-page-content">
       <div ref={wrapperRef} className="dashboard-wrapper">
         <Sidebar />
 
-        <div style={{ padding: 24 }}>
-          <h1 style={{ textAlign: "center" }}>Lista de material</h1>
+        <div style={{ padding: "24px" }}>
+          <h1 style={{ textAlign: "center", marginBottom: "24px" }}>
+            Lista de material
+          </h1>
+          <div
+            style={{
+              display: "flex",
+              gap: 16,
+              marginBottom: 24,
+              justifyContent: "center",
+            }}
+          >
+            <Select
+              placeholder="Filtrar por categoría"
+              allowClear
+              style={{ width: 200 }}
+              onChange={(value) => setSelectedCategory(value || null)}
+              loading={categoriesLoading}
+              value={selectedCategory}
+            >
+              {categories.map((cat) => (
+                <Select.Option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </Select.Option>
+              ))}
+            </Select>
+
+            <Select
+              placeholder="Filtrar por curso"
+              allowClear
+              style={{ width: 200 }}
+              onChange={(value) => setSelectedCourse(value || null)}
+              loading={coursesLoading}
+              value={selectedCourse}
+            >
+              {courseList.map((course) => (
+                <Select.Option key={course._id} value={course._id}>
+                  {course.title}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
 
           {loading && (
-            <Spin size="large" style={{ display: "block", margin: "40px auto" }} />
+            <Spin
+              size="large"
+              style={{ display: "block", margin: "40px auto" }}
+            />
           )}
           {(error || categoriesError || coursesError) && (
             <Alert
@@ -141,44 +198,86 @@ export const MaterialPage = () => {
             />
           )}
 
-          {!loading && !(error || categoriesError || coursesError) && (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-                gap: 16,
-              }}
-            >
-              {materials.map((mat) => (
-                <SpotlightCard
-                  key={mat._id}
-                  className="custom-spotlight-card"
-                  spotlightColor="rgba(0, 229, 255, 0.2)"
-                >
-                  <h3>{mat.title}</h3>
-                  <p>{mat.description}</p>
+          {!loading &&
+            !(error || categoriesError || coursesError) &&
+            (filteredMaterials.length > 0 ? (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+                  gap: "16px",
+                }}
+              >
+                {filteredMaterials.map((mat) => (
+                  <SpotlightCard
+                    key={mat._id}
+                    className="custom-spotlight-card"
+                    spotlightColor="rgba(0, 229, 255, 0.2)"
+                    style={{ borderRadius: "8px" }}
+                  >
+                    <h3>{mat.title}</h3>
+                    <p>{mat.description}</p>
+                    <p>
+                      <strong>Categoría:</strong>{" "}
+                      {mat.category?.name || "Sin categoría"}
+                    </p>
+                    <p>
+                      <strong>Curso:</strong> {mat.course?.title || "Sin curso"}
+                    </p>
 
-                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
-                    <img
-                      src={EditIcon}
-                      alt="Editar"
-                      style={{ cursor: "pointer", width: 20, height: 20 }}
-                      onClick={() => openModalForEdit(mat)}
-                    />
-                    <img
-                      src={DeleteIcon}
-                      alt="Eliminar"
-                      style={{ cursor: "pointer", width: 20, height: 20 }}
-                      onClick={() => handleDelete(mat._id)}
-                    />
-                  </div>
-                </SpotlightCard>
-              ))}
-            </div>
-          )}
+                    {mat.content?.startsWith("http") && (
+                      <div style={{ marginTop: 12 }}>
+                        <a
+                          href={mat.content}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ fontWeight: "bold", color: "#1890ff" }}
+                        >
+                          Ver contenido ↗
+                        </a>
+                      </div>
+                    )}
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: "8px",
+                        marginTop: 8,
+                      }}
+                    >
+                      <img
+                        src={EditIcon}
+                        alt="Editar"
+                        style={{ cursor: "pointer", width: 20, height: 20 }}
+                        onClick={() => openModalForEdit(mat)}
+                      />
+                      <img
+                        src={DeleteIcon}
+                        alt="Eliminar"
+                        style={{ cursor: "pointer", width: 20, height: 20 }}
+                        onClick={() => handleDelete(mat._id)}
+                      />
+                    </div>
+                  </SpotlightCard>
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: "center", marginTop: 48 }}>
+                <p style={{ fontSize: 18, color: "#888" }}>
+                  Lo sentimos, parece ser que no tenemos este material, pero estamos trabajando 
+                  para que esté disponible próximamente
+                </p>
+              </div>
+            ))}
         </div>
 
-        <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
+        <Dock
+          items={dockItems}
+          panelHeight={68}
+          baseItemSize={50}
+          magnification={70}
+        />
 
         {/* Modal agregar/editar material */}
         <Modal
@@ -208,7 +307,12 @@ export const MaterialPage = () => {
             <Form.Item
               label="Contenido (URL o texto)"
               name="content"
-              rules={[{ required: true, message: "Ingresa el contenido del material" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Ingresa el contenido del material",
+                },
+              ]}
             >
               <Input.TextArea rows={3} />
             </Form.Item>

@@ -11,14 +11,14 @@ const cardData = [
   {
     color: "#060010",
     title: "",
-    description: "Administra los cursos de la plataforma",
+    description: "Aquí podrás ver los cursos que los tutores ofrecen para tí",
     label: "Cursos",
   },
   {
     color: "#060010",
-    title: "Usuarios",
-    description: "Administra los usuarios dentro de la base de datos",
-    label: "Estudiantes y maestros",
+    title: "Insignias",
+    description: "Aquí podrás ver tus insignias obtenidas a lo largo de tu trayectoria",
+    label: "Logros",
   },
   {
     color: "#060010",
@@ -34,8 +34,8 @@ const cardData = [
   },
   {
     color: "#060010",
-    title: "Integration",
-    description: "Connect favorite tools",
+    title: "Integración",
+    description: "Mide tus conocimientos mediante pruebas y lecciones en la plataforma",
     label: "Aprendizaje",
   },
   {

@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Spin, Alert, Modal, Form, Input, Select, Button, Row, Col } from "antd";
+import {
+  Spin,
+  Alert,
+  Modal,
+  Form,
+  Input,
+  Select,
+  Button,
+  Row,
+  Col,
+} from "antd";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
-import AddIcon from "../../assets/icons/create.png";  // Aquí importamos el AddIcon
+import AddIcon from "../../assets/icons/create.png"; // Aquí importamos el AddIcon
 import EditIcon from "../../assets/icons/edit.png";
 import DeleteIcon from "../../assets/icons/delete.png";
 import { useQuiz } from "../../shared/hooks/useQuiz";
@@ -10,13 +20,32 @@ import { useCourse } from "../../shared/hooks/useCourse";
 import { SpotlightCard } from "../../components/cards/SpotligthCard";
 import Dock from "../../components/utils/dock/DockItem";
 import UniversalAlert from "../../components/alerts/UniversalAlert";
+import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 
 export const QuizPage = () => {
-  const { quizzes, loading, error, fetchAllQuizzes, createNewQuiz, updateExistingQuiz, deleteExistingQuiz } = useQuiz();
-  const { categories, loading: categoriesLoading, error: categoriesError, fetchAllCategories } = useCategory();
-  const { courses, loading: coursesLoading, error: coursesError, fetchAllCourses } = useCourse();
+  const {
+    quizzes,
+    loading,
+    error,
+    fetchAllQuizzes,
+    createNewQuiz,
+    updateExistingQuiz,
+    deleteExistingQuiz,
+  } = useQuiz();
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+    fetchAllCategories,
+  } = useCategory();
+  const {
+    courses,
+    loading: coursesLoading,
+    error: coursesError,
+    fetchAllCourses,
+  } = useCourse();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
@@ -30,8 +59,8 @@ export const QuizPage = () => {
 
   useEffect(() => {
     fetchAllQuizzes();
-    fetchAllCategories();  // Asegúrate de que las categorías se obtienen al cargar el componente
-    fetchAllCourses();  // Cargar los cursos desde la base de datos
+    fetchAllCategories(); // Asegúrate de que las categorías se obtienen al cargar el componente
+    fetchAllCourses(); // Cargar los cursos desde la base de datos
   }, []);
 
   const handleCreateClick = () => {
@@ -49,7 +78,7 @@ export const QuizPage = () => {
     const { title, description, category, level, questions, course } = values;
 
     // Validar que cada pregunta tiene respuesta correcta
-    const questionsWithCorrectAnswer = questions.map(question => {
+    const questionsWithCorrectAnswer = questions.map((question) => {
       if (!question.correctAnswer) {
         message.error("Cada pregunta debe tener una respuesta correcta");
         setModalLoading(false);
@@ -57,6 +86,8 @@ export const QuizPage = () => {
       }
       return question;
     });
+
+    const navigate = useNavigate();
 
     const quizData = {
       title,
@@ -92,7 +123,7 @@ export const QuizPage = () => {
       category: quiz.category._id,
       level: quiz.level,
       questions: quiz.questions,
-      course: quiz.course._id,  // Prellenar el campo del curso
+      course: quiz.course._id, // Prellenar el campo del curso
     });
   };
 
@@ -105,7 +136,9 @@ export const QuizPage = () => {
       if (success) {
         fetchAllQuizzes();
       } else {
-        setErrorDetail("No se pudo eliminar el quiz. Por favor, intenta nuevamente.");
+        setErrorDetail(
+          "No se pudo eliminar el quiz. Por favor, intenta nuevamente."
+        );
         setAlertTitle("Error al eliminar el quiz");
         setAlertMessage("Hubo un problema al eliminar el quiz.");
         setAlertVisible(true);
@@ -117,9 +150,9 @@ export const QuizPage = () => {
   const items = [
     {
       icon: <img src={AddIcon} alt="Crear" style={{ width: 24, height: 24 }} />,
-      label: 'Crear',
+      label: "Crear",
       onClick: handleCreateClick,
-      disabled: false
+      disabled: false,
     },
   ];
 
@@ -155,7 +188,12 @@ export const QuizPage = () => {
 
                   {loading && <Spin size="large" />}
                   {error && (
-                    <Alert message="Error" description={error} type="error" showIcon />
+                    <Alert
+                      message="Error"
+                      description={error}
+                      type="error"
+                      showIcon
+                    />
                   )}
 
                   {!loading && !error && (
@@ -171,24 +209,59 @@ export const QuizPage = () => {
                             onClick={() => handleSelectQuiz(quiz)}
                           >
                             <h3>{quiz.title}</h3>
-                            <p><strong>Nivel:</strong> {quiz.level}</p>
-                            <p><strong>Categoría:</strong> {quiz.category?.name || "N/A"}</p>
-                            <p><strong>Creado por:</strong> {quiz.createdBy?.username || "N/A"}</p>
+                            <p>
+                              <strong>Nivel:</strong> {quiz.level}
+                            </p>
+                            <p>
+                              <strong>Categoría:</strong>{" "}
+                              {quiz.category?.name || "N/A"}
+                            </p>
+                            <p>
+                              <strong>Creado por:</strong>{" "}
+                              {quiz.createdBy?.username || "N/A"}
+                            </p>
                             <p>{quiz.description}</p>
 
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                              <img
-                                src={EditIcon}
-                                alt="Editar"
-                                style={{ cursor: "pointer", width: 20, height: 20 }}
-                                onClick={() => handleSelectQuiz(quiz)}
-                              />
-                              <img
-                                src={DeleteIcon}
-                                alt="Eliminar"
-                                style={{ cursor: "pointer", width: 20, height: 20 }}
-                                onClick={() => handleDeleteQuiz(quiz._id)}
-                              />
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginTop: 12,
+                              }}
+                            >
+                              <Button
+                                type="primary"
+                                size="small"
+                                onClick={() =>
+                                  navigate(`/quizzes/resolver/${quiz._id}`)
+                                }
+                              >
+                                Resolver
+                              </Button>
+
+                              <div style={{ display: "flex", gap: "8px" }}>
+                                <img
+                                  src={EditIcon}
+                                  alt="Editar"
+                                  style={{
+                                    cursor: "pointer",
+                                    width: 20,
+                                    height: 20,
+                                  }}
+                                  onClick={() => handleSelectQuiz(quiz)}
+                                />
+                                <img
+                                  src={DeleteIcon}
+                                  alt="Eliminar"
+                                  style={{
+                                    cursor: "pointer",
+                                    width: 20,
+                                    height: 20,
+                                  }}
+                                  onClick={() => handleDeleteQuiz(quiz._id)}
+                                />
+                              </div>
                             </div>
                           </SpotlightCard>
                         ))
@@ -228,7 +301,12 @@ export const QuizPage = () => {
             <Form.Item
               label="Título"
               name="title"
-              rules={[{ required: true, message: "Por favor ingrese el título del quiz" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingrese el título del quiz",
+                },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -236,7 +314,12 @@ export const QuizPage = () => {
             <Form.Item
               label="Descripción"
               name="description"
-              rules={[{ required: true, message: "Por favor ingrese una descripción" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingrese una descripción",
+                },
+              ]}
             >
               <TextArea rows={4} />
             </Form.Item>
@@ -245,7 +328,12 @@ export const QuizPage = () => {
             <Form.Item
               label="Categoría"
               name="category"
-              rules={[{ required: true, message: "Por favor seleccione una categoría" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor seleccione una categoría",
+                },
+              ]}
             >
               <Select
                 loading={categoriesLoading}
@@ -264,7 +352,9 @@ export const QuizPage = () => {
             <Form.Item
               label="Curso"
               name="course"
-              rules={[{ required: true, message: "Por favor seleccione un curso" }]}
+              rules={[
+                { required: true, message: "Por favor seleccione un curso" },
+              ]}
             >
               <Select
                 loading={coursesLoading}
@@ -283,7 +373,9 @@ export const QuizPage = () => {
               label="Nivel"
               name="level"
               initialValue="Beginner"
-              rules={[{ required: true, message: "Por favor seleccione un nivel" }]}
+              rules={[
+                { required: true, message: "Por favor seleccione un nivel" },
+              ]}
             >
               <Select>
                 <Select.Option value="Beginner">Principiante</Select.Option>
@@ -293,10 +385,18 @@ export const QuizPage = () => {
             </Form.Item>
 
             {/* Agregar Preguntas */}
-            <Form.Item
-              label="Preguntas"
-            >
-              <Button type="dashed" onClick={addQuestion} icon={<img src={AddIcon} alt="Agregar Pregunta" style={{ width: 24, height: 24 }} />}>
+            <Form.Item label="Preguntas">
+              <Button
+                type="dashed"
+                onClick={addQuestion}
+                icon={
+                  <img
+                    src={AddIcon}
+                    alt="Agregar Pregunta"
+                    style={{ width: 24, height: 24 }}
+                  />
+                }
+              >
                 Agregar Pregunta
               </Button>
 
@@ -305,9 +405,11 @@ export const QuizPage = () => {
                 initialValue={[]}
                 rules={[
                   {
-                    validator: async(_, names) => {
+                    validator: async (_, names) => {
                       if (!names || names.length < 1) {
-                        return Promise.reject(new Error('Al menos una pregunta debe ser agregada'));
+                        return Promise.reject(
+                          new Error("Al menos una pregunta debe ser agregada")
+                        );
                       }
                     },
                   },
@@ -315,48 +417,76 @@ export const QuizPage = () => {
               >
                 {(fields, { add, remove }) => (
                   <>
-                    {fields.map(({ key, fieldKey, name, fieldNames, ...restField }) => (
-                      <div key={key} style={{ marginBottom: 10 }}>
-                        <Row gutter={16}>
-                          <Col span={8}>
-                            <Form.Item
-                              {...restField}
-                              name={[name, 'questionText']}
-                              fieldKey={[fieldKey, 'questionText']}
-                              label="Texto de la pregunta"
-                              rules={[{ required: true, message: 'Por favor ingrese la pregunta' }]}>
-                              <Input placeholder="Pregunta" />
-                            </Form.Item>
-                          </Col>
-                          <Col span={12}>
-                            <Form.Item
-                              {...restField}
-                              name={[name, 'options']}
-                              fieldKey={[fieldKey, 'options']}
-                              label="Opciones"
-                              rules={[{ required: true, message: 'Por favor ingrese las opciones' }]}>
-                              <Input placeholder="Opciones separadas por comas" />
-                            </Form.Item>
-                          </Col>
-                          <Col span={4}>
-                            <Form.Item
-                              {...restField}
-                              name={[name, 'correctAnswer']}
-                              fieldKey={[fieldKey, 'correctAnswer']}
-                              label="Respuesta Correcta"
-                              rules={[{ required: true, message: 'Por favor ingrese la respuesta correcta' }]}>
-                              <Input placeholder="Respuesta Correcta" />
-                            </Form.Item>
-                            <Button
-                              type="danger"
-                              icon={<img src={DeleteIcon} alt="Eliminar Pregunta" style={{ width: 24, height: 24 }} />}
-                              onClick={() => remove(name)}>
-                              Eliminar Pregunta
-                            </Button>
-                          </Col>
-                        </Row>
-                      </div>
-                    ))}
+                    {fields.map(
+                      ({ key, fieldKey, name, fieldNames, ...restField }) => (
+                        <div key={key} style={{ marginBottom: 10 }}>
+                          <Row gutter={16}>
+                            <Col span={8}>
+                              <Form.Item
+                                {...restField}
+                                name={[name, "questionText"]}
+                                fieldKey={[fieldKey, "questionText"]}
+                                label="Texto de la pregunta"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Por favor ingrese la pregunta",
+                                  },
+                                ]}
+                              >
+                                <Input placeholder="Pregunta" />
+                              </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                              <Form.Item
+                                {...restField}
+                                name={[name, "options"]}
+                                fieldKey={[fieldKey, "options"]}
+                                label="Opciones"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Por favor ingrese las opciones",
+                                  },
+                                ]}
+                              >
+                                <Input placeholder="Opciones separadas por comas" />
+                              </Form.Item>
+                            </Col>
+                            <Col span={4}>
+                              <Form.Item
+                                {...restField}
+                                name={[name, "correctAnswer"]}
+                                fieldKey={[fieldKey, "correctAnswer"]}
+                                label="Respuesta Correcta"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor ingrese la respuesta correcta",
+                                  },
+                                ]}
+                              >
+                                <Input placeholder="Respuesta Correcta" />
+                              </Form.Item>
+                              <Button
+                                type="danger"
+                                icon={
+                                  <img
+                                    src={DeleteIcon}
+                                    alt="Eliminar Pregunta"
+                                    style={{ width: 24, height: 24 }}
+                                  />
+                                }
+                                onClick={() => remove(name)}
+                              >
+                                Eliminar Pregunta
+                              </Button>
+                            </Col>
+                          </Row>
+                        </div>
+                      )
+                    )}
                   </>
                 )}
               </Form.List>

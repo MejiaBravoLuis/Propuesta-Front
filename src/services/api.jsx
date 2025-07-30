@@ -290,4 +290,14 @@ export const deleteQuiz = async (id) => {
   }
 };
 
+export const getUserProgress = async () => {
+  try {
+    const response = await apiClient.get("/progress");
+    return response.data.progresses;
+  } catch (e) {
+    console.error("Error fetching user progress:", e);
+    return [];
+  }
+};
+
 export default apiClient;
