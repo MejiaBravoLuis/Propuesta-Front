@@ -42,43 +42,51 @@ export const Sidebar = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        width={200}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          height: "100vh",
-          background: "#001529",
-          zIndex: 10,
-        }}
-      >
-        <div
-          style={{
-            height: 64,
-            color: "white",
-            textAlign: "center",
-            lineHeight: "64px",
-            fontWeight: "bold",
-            fontSize: 28,
-            cursor: "pointer",
-          }}
-          onClick={() => onMenuClick({ key: "edu" })}
-        >
-          {!collapsed ? "EducaGT" : "EGT"}
-        </div>
+  collapsible
+  collapsed={collapsed}
+  onCollapse={(value) => setCollapsed(value)}
+  width={200}
+  style={{
+    position: "fixed",
+    top: 0,
+    left: 0,
+    height: "100vh",
+    background: "#0b1120", // fondo educativo
+    borderRight: "1px solid #334155", // borde azul grisáceo
+    boxShadow: "2px 0 10px rgba(0, 0, 0, 0.25)", // profundidad sutil
+    zIndex: 10,
+  }}
+>
+  <div
+    style={{
+      height: 64,
+      color: "#3B82F6", // azul principal
+      textAlign: "center",
+      lineHeight: "64px",
+      fontWeight: "bold",
+      fontSize: 28,
+      cursor: "pointer",
+      letterSpacing: 1.5,
+      textShadow: "0 0 4px rgba(59, 130, 246, 0.5)",
+    }}
+    onClick={() => onMenuClick({ key: "edu" })}
+  >
+    {!collapsed ? "EducaGT" : "EGT"}
+  </div>
 
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["cursos"]}
-          onClick={onMenuClick}
-          items={menuItems}
-          style={{ marginTop: 20 }}
-        />
-      </Sider>
+  <Menu
+    theme="dark"
+    mode="inline"
+    defaultSelectedKeys={["cursos"]}
+    onClick={onMenuClick}
+    items={menuItems}
+    style={{
+      marginTop: 20,
+      backgroundColor: "transparent", // fondo del menú transparente
+      color: "#94a3b8", // color de ítems por defecto
+    }}
+  />
+</Sider>
     </motion.div>
   );
 };

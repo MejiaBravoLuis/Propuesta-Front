@@ -1,13 +1,21 @@
 :root {
-  --hue: 27;
-  --sat: 69%;
-  --white: hsl(0, 0%, 100%);
-  --purple-primary: rgba(132, 0, 255, 1);
-  --purple-glow: rgba(132, 0, 255, 0.2);
-  --purple-border: rgba(132, 0, 255, 0.8);
-  --border-color: #392e4e;
-  --background-dark: #060010;
-  color-scheme: light dark;
+  --hue: 217;
+  --sat: 100%;
+  --white: #F8FAFC;
+
+  /* Paleta nueva */
+  --primary: #3B82F6; /* azul educativo */
+  --primary-dark: #1E40AF; /* azul fuerte */
+  --accent: #FACC15; /* amarillo amigable */
+
+  /* Sustituyen a los "morado" */
+  --purple-primary: var(--primary);
+  --purple-glow: rgba(59, 130, 246, 0.2);     /* antes: rgba(132, 0, 255, 0.2) */
+  --purple-border: rgba(59, 130, 246, 0.8);   /* antes: rgba(132, 0, 255, 0.8) */
+
+  --border-color: #334155;
+  --background-dark: #0B1120;
+  --card-dark: #111827;
 }
 
 .card-grid {
@@ -150,9 +158,9 @@
   inset: 0;
   padding: 6px;
   background: radial-gradient(var(--glow-radius) circle at var(--glow-x) var(--glow-y),
-      rgba(132, 0, 255, calc(var(--glow-intensity) * 0.8)) 0%,
-      rgba(132, 0, 255, calc(var(--glow-intensity) * 0.4)) 30%,
-      transparent 60%);
+    rgba(59, 130, 246, calc(var(--glow-intensity) * 0.8)) 0%,
+    rgba(59, 130, 246, calc(var(--glow-intensity) * 0.4)) 30%,
+    transparent 60%);
   border-radius: inherit;
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: subtract;
@@ -168,7 +176,7 @@
 }
 
 .card--border-glow:hover {
-  box-shadow: 0 4px 20px rgba(46, 24, 78, 0.4), 0 0 30px var(--purple-glow);
+  box-shadow: 0 4px 20px rgba(30, 64, 175, 0.4), 0 0 30px var(--purple-glow);
 }
 
 .particle-container {
@@ -183,7 +191,7 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: rgba(132, 0, 255, 0.2);
+  background: var(--purple-glow);
   border-radius: 50%;
   z-index: -1;
 }

@@ -1,12 +1,13 @@
 :root {
-  --primary-color: #3a86ff;
-  --secondary-color: #8338ec;
-  --accent-color: #ff006e;
-  --dark-bg: #121212;
-  --light-text: #ffffff;
-  --semi-transparent: rgba(255, 255, 255, 0.1);
+  --primary-color: #4FA3F7;           /* azul más educativo */
+  --secondary-color: #FFD75F;         /* amarillo amigable */
+  --accent-color: #F76E6E;            /* rojo coral simpático */
+  --dark-bg: #0C1E3C;                 /* azul profundo */
+  --light-text: #FFFFFF;
+  --semi-transparent: rgba(255, 255, 255, 0.07);
   --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
 }
+
 
 body {
   margin: 0;
@@ -214,7 +215,7 @@ body {
 .stepper-container {
   flex: 1;
   min-width: 300px;
-  margin-top: 860px; /* espacio extra arriba */
+  margin-top: 820px; /* espacio extra arriba */
 }
 
 .info-card {
