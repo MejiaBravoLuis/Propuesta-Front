@@ -290,6 +290,15 @@ export const deleteQuiz = async (id) => {
   }
 };
 
+export const submitQuiz = async (id) => {
+  try {
+    await apiClient.post(`quiz/${id}/submit`);
+  } catch (error) {
+    console.error("Error submit quiz:", error);
+    throw error;
+  }
+};
+
 export const getUserProgress = async () => {
   try {
     const response = await apiClient.get("/progress");

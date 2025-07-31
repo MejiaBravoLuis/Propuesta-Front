@@ -71,7 +71,6 @@ export const useForums = () => {
   setLoading(true);
   setError(null);
   try {
-    // Si esto no lanza, ¡operación exitosa!
     await deleteForum(id);
     setForums(prev => prev.filter(f => f._id !== id));
     return true;

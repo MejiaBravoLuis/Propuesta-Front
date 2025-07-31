@@ -1,83 +1,115 @@
 import React, { useEffect, useState } from "react";
-import { Spin, Alert, Modal, Form, Input, Button } from "antd";
+import {
+  Spin,
+  Alert,
+  Modal,
+  Form,
+  Input,
+  Button,
+  Popconfirm,
+} from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 import { UserProfileModal } from "../../components/UserProfileModal";
 import ProfileImage from "../../assets/img/ye.png";
-import AddIcon from "../../assets/icons/create.png"; // Imagen de crear
-import { useCategory } from "../../shared/hooks/useCategory"; // Suponiendo que tienes el hook useCategory
+import AddIcon from "../../assets/icons/create.png";
+import { useCategory } from "../../shared/hooks/useCategory";
 import { SpotlightCard } from "../../components/cards/SpotligthCard";
 import Waves from "../../components/animations/background/waves/Waves";
 import Dock from "../../components/utils/dock/DockItem";
-import './CategoryPage.css'
+import { useUserDetails } from "../../shared/hooks/useUserDetails";
+import "./CategoryPage.css";
 
 export const CategoryPage = () => {
-  const { categories, loading, error, fetchAllCategories, createCategory } =
-    useCategory();
+  const navigate = useNavigate();
+  const { role } = useUserDetails();
+  const {
+    categories,
+    loading,
+    error,
+    fetchAllCategories,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+  } = useCategory();
 
   const [user, setUser] = useState(null);
-  const [createCategoryModalVisible, setCreateCategoryModalVisible] =
-    useState(false); // Modal de agregar categoría
-  const [profileModalVisible, setProfileModalVisible] = useState(false); // Modal del perfil
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null); // Para manejar la categoría seleccionada
-  const [form] = Form.useForm(); // Formulario de Ant Design
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [form] = Form.useForm();
+  const [profileVisible, setProfileVisible] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const stored = localStorage.getItem("user");
+    if (stored) setUser(JSON.parse(stored));
   }, []);
 
   useEffect(() => {
     fetchAllCategories();
   }, []);
 
-  const handleCreateClick = () => {
-    setCreateCategoryModalVisible(true);
+  const openCreate = () => {
+    form.resetFields();
+    setCurrentCategory(null);
+    setCreateModalVisible(true);
   };
-
-  const handleCancelCreateCategoryModal = () => {
-    setCreateCategoryModalVisible(false);
+  const closeCreate = () => {
+    setCreateModalVisible(false);
     form.resetFields();
   };
-
-  const handleSubmit = async (values) => {
+  const submitCreate = async (values) => {
     setModalLoading(true);
-    const { name, description } = values;
-
-    const newCategory = { name, description };
-
-    const createdCategory = await createCategory(newCategory);
+    await createCategory({ name: values.name, description: values.description });
     setModalLoading(false);
-
-    if (createdCategory) {
-      setCreateCategoryModalVisible(false);
-      form.resetFields();
-      fetchAllCategories(); // Actualiza la lista de categorías después de crear una
-    }
+    closeCreate();
+    fetchAllCategories();
   };
 
-  const handleSelectCategory = (category) => {
-    setSelectedCategory(category);
+  const openEdit = (cat) => {
+    setCurrentCategory(cat);
+    form.setFieldsValue({ name: cat.name, description: cat.description });
+    setEditModalVisible(true);
+  };
+  const closeEdit = () => {
+    setEditModalVisible(false);
+    form.resetFields();
+    setCurrentCategory(null);
+  };
+  const submitEdit = async (values) => {
+    setModalLoading(true);
+    await updateCategory(currentCategory._id, {
+      name: values.name,
+      description: values.description,
+    });
+    setModalLoading(false);
+    closeEdit();
+    fetchAllCategories();
   };
 
-  const items = [
-    {
-      icon: <img src={AddIcon} alt="Crear" style={{ width: 24, height: 24 }} />,
-      label: "Crear",
-      onClick: handleCreateClick,
-      disabled: false,
-    },
-  ];
+  const confirmDelete = async (id) => {
+    setModalLoading(true);
+    await deleteCategory(id);
+    setModalLoading(false);
+    fetchAllCategories();
+  };
+
+  const dockItems =
+    role === "ADMIN"
+      ? [
+          {
+            icon: <img src={AddIcon} alt="Crear" style={{ width: 24 }} />,
+            label: "Crear",
+            onClick: openCreate,
+          },
+        ]
+      : [];
 
   return (
-    <div
-      className="category-page-content"
-      style={{ height: "100vh", overflow: "hidden" }}
-    >
+    <div className="category-page-content">
       <Waves
-        lineColor="rgb(99, 8, 125)"
+        lineColor="rgb(99,8,125)"
         backgroundColor="transparent"
         waveSpeedX={0.02}
         waveSpeedY={0.01}
@@ -89,113 +121,132 @@ export const CategoryPage = () => {
         xGap={12}
         yGap={36}
       />
-      <div
-        className="category-wrapper"
-        style={{ display: "flex", flexDirection: "column", height: "100%" }}
-      >
+
+      <div className="category-wrapper">
         <Sidebar />
-        <div
-          className="main-content"
-          style={{ flex: 1, paddingBottom: "80px" }}
-        >
-          <div className="bottom-panel">
-            <div className="category-content-area">
-              <h1>Categorías disponibles</h1>
 
-              {loading && <Spin size="large" />}
-              {error && (
-                <Alert
-                  message="Error"
-                  description={error}
-                  type="error"
-                  showIcon
-                />
-              )}
+        <div className="main-content">
+          <h1>Categorías disponibles</h1>
 
-              {!loading && !error && (
-                <>
-                  {categories.length === 0 ? (
-                    <p>No hay categorías disponibles.</p>
-                  ) : (
-                    <div
-                      style={{
-                        display: "flex", // Cambiar a flexbox
-                        flexDirection: "column", // Asegura que se agreguen abajo
-                        gap: "16px", // Espaciado entre las categorías
-                      }}
+          {loading && <Spin size="large" />}
+          {error && <Alert message="Error" description={error} type="error" showIcon />}
+
+          {!loading && !error && (
+            categories.length === 0 ? (
+              <p>No hay categorías disponibles.</p>
+            ) : (
+              <div className="category-list">
+                {categories.map((cat) => (
+                  <Link
+                    key={cat._id}
+                    to={`/STcursos?category=${cat._id}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <SpotlightCard
+                      className="custom-spotlight-card"
+                      spotlightColor="rgb(99,8,125)"
+                      style={{ position: "relative", cursor: "pointer" }}
                     >
-                      {categories.map((category) => (
-                        <SpotlightCard
-                          key={category._id}
-                          className="custom-spotlight-card"
-                          spotlightColor="rgb(99, 8, 125)"
-                          onClick={() => handleSelectCategory(category)}
+                      {role === "ADMIN" && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: 8,
+                            right: 8,
+                            display: "flex",
+                            gap: 8,
+                          }}
+                          onClick={(e) => e.preventDefault()}
                         >
-                          <h3>{category.name}</h3>
-                          <p>{category.description}</p>
-                        </SpotlightCard>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
+                          <Button size="small" onClick={() => openEdit(cat)}>
+                            Editar
+                          </Button>
+                          <Popconfirm
+                            title="Eliminar categoría?"
+                            onConfirm={() => confirmDelete(cat._id)}
+                            okText="Sí"
+                            cancelText="No"
+                          >
+                            <Button size="small" danger>
+                              Eliminar
+                            </Button>
+                          </Popconfirm>
+                        </div>
+                      )}
+                      <h3>{cat.name}</h3>
+                      <p>{cat.description}</p>
+                    </SpotlightCard>
+                  </Link>
+                ))}
+              </div>
+            )
+          )}
         </div>
 
-        <Dock
-          items={items}
-          panelHeight={68}
-          baseItemSize={50}
-          magnification={70}
-          style={{
-            position: "fixed",
-            bottom: 20,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 9999,
-            background: "transparent",
-          }}
-        />
+        {dockItems.length > 0 && (
+          <Dock
+            items={dockItems}
+            panelHeight={68}
+            baseItemSize={50}
+            magnification={70}
+            style={{
+              position: "fixed",
+              bottom: 20,
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 9999,
+            }}
+          />
+        )}
 
+        {/* Crear Modal */}
         <Modal
           title="Crear nueva categoría"
-          visible={createCategoryModalVisible}
-          onCancel={handleCancelCreateCategoryModal}
-          onOk={handleSubmit}
+          visible={createModalVisible}
+          onCancel={closeCreate}
+          onOk={() => form.submit()}
           confirmLoading={modalLoading}
         >
-          <Form form={form} onFinish={handleSubmit} layout="vertical">
+          <Form form={form} onFinish={submitCreate} layout="vertical">
             <Form.Item
-              label="Nombre de la categoría"
+              label="Nombre"
               name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingrese el nombre de la categoría",
-                },
-              ]}
+              rules={[{ required: true, message: "Ingrese nombre" }]}
             >
               <Input />
             </Form.Item>
-
             <Form.Item
               label="Descripción"
               name="description"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingrese una descripción",
-                },
-              ]}
+              rules={[{ required: true, message: "Ingrese descripción" }]}
             >
               <Input.TextArea rows={4} />
             </Form.Item>
+          </Form>
+        </Modal>
 
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={modalLoading}>
-                Crear Categoría
-              </Button>
+        {/* Editar Modal */}
+        <Modal
+          title="Editar categoría"
+          visible={editModalVisible}
+          onCancel={closeEdit}
+          onOk={() => form.submit()}
+          confirmLoading={modalLoading}
+        >
+          <Form form={form} onFinish={submitEdit} layout="vertical">
+            <Form.Item
+              label="Nombre"
+              name="name"
+              rules={[{ required: true, message: "Ingrese nombre" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Descripción"
+              name="description"
+              rules={[{ required: true, message: "Ingrese descripción" }]}
+            >
+              <Input.TextArea rows={4} />
             </Form.Item>
           </Form>
         </Modal>
@@ -203,12 +254,12 @@ export const CategoryPage = () => {
         <img
           src={ProfileImage}
           alt="Perfil"
-          onClick={() => setProfileModalVisible(true)}
           className="profile-avatar"
+          onClick={() => setProfileVisible(true)}
         />
         <UserProfileModal
-          visible={profileModalVisible}
-          onClose={() => setProfileModalVisible(false)}
+          visible={profileVisible}
+          onClose={() => setProfileVisible(false)}
           user={user}
         />
       </div>

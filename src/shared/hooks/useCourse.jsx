@@ -40,7 +40,6 @@ export const useCourse = () => {
       setError("Error al obtener el curso");
       return;
     }
-
     setCourse(res.course || null);
   };
 

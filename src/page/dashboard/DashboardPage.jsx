@@ -12,19 +12,17 @@ import "./dashboardPage.css";
 export const DashboardPage = () => {
   const [showWelcomeVideo, setShowWelcomeVideo] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [narradorActivo, setNarradorActivo] = useState(true);
   const videoRef = useRef(null);
   const [textAnimation, setTextAnimation] = useState(false);
 
   const [user, setUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-
   const { role } = useUserDetails();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const stored = localStorage.getItem("user");
+    if (stored) setUser(JSON.parse(stored));
   }, []);
 
   useEffect(() => {
@@ -32,15 +30,25 @@ export const DashboardPage = () => {
       setShowWelcomeVideo(true);
     }
     setTimeout(() => setTextAnimation(true), 300);
+    return () => {
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    };
   }, []);
 
   const handleSkipWelcomeVideo = () => {
     setShowWelcomeVideo(false);
     sessionStorage.setItem("welcomeVideoViewed", "true");
   };
+  const toggleMute = () => setIsMuted(m => !m);
+  const toggleNarrador = () => setNarradorActivo(a => !a);
 
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
+  const leerTexto = (texto) => {
+    if (narradorActivo && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(texto);
+      u.lang = "es-ES";
+      window.speechSynthesis.speak(u);
+    }
   };
 
   return (
@@ -93,17 +101,37 @@ export const DashboardPage = () => {
               allowFullScreen
               className="featured-video"
             />
+            
             <div
               className={`welcome-message-overlay ${
                 textAnimation ? "animated" : ""
-              }`}
+                
+              }`
+            }
             >
               <h1 className="dashboard-title">
-                <span className="title-line">Bienvenido al</span>
-                <span className="title-line highlight">¿Qué es EducaGT?</span>
+                <span
+                  className="title-line"
+                  onMouseEnter={() => leerTexto("Bienvenido al")}
+                >
+                  Bienvenido al
+                </span>
+                <span
+                  className="title-line highlight"
+                  onMouseEnter={() => leerTexto("¿Qué es EducaGT?")}
+                >
+                  ¿Qué es EducaGT?
+                </span>
               </h1>
               <div className="animated-subtitle">
-                <p className="dashboard-subtitle">
+                <p
+                  className="dashboard-subtitle"
+                  onMouseEnter={() =>
+                    leerTexto(
+                      "En EducaGT buscamos crear una red de personas que busquen superarse en las materias que notan una dificultad."
+                    )
+                  }
+                >
                   <span className="subtitle-text">
                     En EducaGT buscamos crear una red de personas que busquen
                     superarse en las materias que notan una dificultad, este
@@ -127,41 +155,76 @@ export const DashboardPage = () => {
                   <Stepper
                     initialStep={1}
                     onStepChange={(step) => {
-                      console.log(step);
                     }}
                     onFinalStepCompleted={() =>
                       console.log("All steps completed!")
                     }
-                    backButtonText="Regresar "
-                    nextButtonText="Siguiente"
+                    backButtonText={
+                      <span onMouseEnter={() => leerTexto("Regresar")}>Regresar</span>
+                    }
+                    nextButtonText={
+                      <span onMouseEnter={() => leerTexto("Siguiente")}>Siguiente</span>
+                    }
                   >
                     <Step>
-                      <h2>¡Bienvenido a EducaGT!</h2>
-                      <p>
+                      <h2 onMouseEnter={() => leerTexto("¡Bienvenido a EducaGT!")}>
+                        ¡Bienvenido a EducaGT!
+                      </h2>
+                      <p
+                        onMouseEnter={() =>
+                          leerTexto(
+                            "Para nosotros es un placer tenerte aquí, este es un pequeño tutorial para que veas el funcionamiento de nuestra plataforma."
+                          )
+                        }
+                      >
                         Para nosotros es un placer tenerte aquí, este es un
                         pequeño tutorial para que veas el funcionamiento de
                         nuestra plataforma!
                       </p>
                     </Step>
                     <Step>
-                      <h2>¿Qué es esto?</h2>
-                      <p>
+                      <h2 onMouseEnter={() => leerTexto("¿Qué es esto?")}>
+                        ¿Qué es esto?
+                      </h2>
+                      <p
+                        onMouseEnter={() =>
+                          leerTexto(
+                            "En EducaGT queremos que refuerces tus conocimientos con el uso de diferentes materiales, tutoriales, prácticas y lecciones."
+                          )
+                        }
+                      >
                         En EducaGT queremos que refuerces tus conocimientos con
                         el uso de diferentes materiales, tutoriales, prácticas y
                         lecciones que tomarás a tu gusto.
                       </p>
                     </Step>
                     <Step>
-                      <h2>¿Qué hago aquí?</h2>
-                      <p>
+                      <h2 onMouseEnter={() => leerTexto("¿Qué hago aquí?")}>
+                        ¿Qué hago aquí?
+                      </h2>
+                      <p
+                        onMouseEnter={() =>
+                          leerTexto(
+                            "Con nosotros podrás aprender más acerca de tus materias favoritas tomando lecciones de aprendizaje personalizadas a tu gusto y propio ritmo."
+                          )
+                        }
+                      >
                         Con nosotros podrás aprender más a cerca de tus materias
                         favoritas tomando lecciones de aprendizaje
                         personalizadas a tu gusto y propio ritmo.
                       </p>
                     </Step>
                     <Step>
-                      <h2>Para maestros</h2>
-                      <p>
+                      <h2 onMouseEnter={() => leerTexto("Para maestros")}>
+                        Para maestros
+                      </h2>
+                      <p
+                        onMouseEnter={() =>
+                          leerTexto(
+                            "Si eres profesor, aquí podrás publicar tus clases, materiales, notas de clase, impartir cursos y enseñar en general en las materias que más te gusten."
+                          )
+                        }
+                      >
                         Si eres profesor de alguna institución, aquí podrás
                         publicar tus clases, materiales, notas de clase,
                         impartir cursos y enseñar en general en las materias que
@@ -192,20 +255,20 @@ export const DashboardPage = () => {
                     glowColor="132, 0, 255"
                   />
 
-                  {role === "STUDENT" && (
-                    <div className="student-message">
+                   {role === "STUDENT" && (
+                    <div
+                      className="student-message"
+                      onMouseEnter={() =>
+                        leerTexto(
+                          "En EducaGT buscamos crear una red de personas que busquen superarse en las materias que notan una dificultad, este sitio es especial para aprender a tu propio ritmo y gusto. Aquí podrás encontrar material de información para mejorar tu aprendizaje en los temas que más te cuesten."
+                        )
+                      }
+                    >
                       <ShinyText
-                        text=" En EducaGT buscamos crear una red de personas que
-                        busquen superarse en las materias que notan una
-                        dificultad, este sitio es especial para aprender a tu
-                        propio ritmo y gusto. Aquí podrás encontrar material de
-                        información para mejorar tu aprendizaje en los temas que
-                        más te cuesten, si eres profesor y quieres ayudar a la
-                        comunidad de estudiantes puedes publicar tu material
-                        para ayudar a mejorar y crecer nuestra plataforma."
+                        text="En EducaGT buscamos crear una red de personas que busquen superarse en las materias que notan una dificultad, este sitio es especial para aprender a tu propio ritmo y gusto. Aquí podrás encontrar material de información para mejorar tu aprendizaje en los temas que más te cuesten."
                         disabled={false}
-                        speed={3}
-                        className="custom-class"
+                        speed={5}
+                        className="student-message-f"
                       />
                     </div>
                   )}
@@ -214,6 +277,7 @@ export const DashboardPage = () => {
             </div>
           </div>
         </div>
+
         <img
           src={ProfileImage}
           alt="Perfil"
@@ -225,6 +289,12 @@ export const DashboardPage = () => {
           onClose={() => setModalVisible(false)}
           user={user}
         />
+      </div>
+
+      <div style={{ position: "fixed", bottom: "120px", right: "20px", zIndex: 1000 }}>
+        <button className="mute-button" onClick={toggleNarrador}>
+          {narradorActivo ? "🔊 Narrador On" : "🔇 Narrador Off"}
+        </button>
       </div>
     </div>
   );

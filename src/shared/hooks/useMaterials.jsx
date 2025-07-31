@@ -1,3 +1,4 @@
+// src/shared/hooks/useMaterials.jsx
 import { useState } from "react";
 import {
   getAllMaterials,
@@ -34,6 +35,20 @@ export const useMaterials = () => {
       setMaterial(data);
     } catch (err) {
       setError(err.message || "Error fetching material");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMaterialsByCourse = async (courseId) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const all = await getAllMaterials();
+      const filtered = all.filter((m) => m.course?._id === courseId);
+      setMaterials(filtered);
+    } catch (err) {
+      setError(err.message || "Error fetching materials for course");
     } finally {
       setLoading(false);
     }
@@ -87,6 +102,7 @@ export const useMaterials = () => {
     error,
     fetchAllMaterials,
     fetchMaterialById,
+    fetchMaterialsByCourse,
     createNewMaterial,
     updateExistingMaterial,
     deleteExistingMaterial,
