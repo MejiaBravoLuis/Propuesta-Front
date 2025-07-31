@@ -69,7 +69,6 @@ export const getCategoryById = async (id) => {
   }
 };
 
-// Actualizar una categoría
 export const updateCategory = async (id, data) => {
   try {
     const response = await apiClient.put(`category/${id}`, data);
@@ -80,7 +79,6 @@ export const updateCategory = async (id, data) => {
   }
 };
 
-// Eliminar una categoría
 export const deleteCategory = async (id) => {
   try {
     const response = await apiClient.delete(`category/${id}`);
@@ -290,13 +288,9 @@ export const deleteQuiz = async (id) => {
   }
 };
 
-export const submitQuiz = async (id) => {
-  try {
-    await apiClient.post(`quiz/${id}/submit`);
-  } catch (error) {
-    console.error("Error submit quiz:", error);
-    throw error;
-  }
+export const submitQuiz = async (quizId, payload) => {
+  const res = await apiClient.post(`/quiz/${quizId}/submit`, payload);
+  return res.data;
 };
 
 export const getUserProgress = async () => {

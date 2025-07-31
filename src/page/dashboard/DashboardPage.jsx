@@ -57,9 +57,7 @@ export const DashboardPage = () => {
         <div className="welcome-video-overlay">
           <iframe
             ref={videoRef}
-            src={`https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=${
-              isMuted ? 1 : 0
-            }&controls=0&modestbranding=1&rel=0`}
+            src={`https://www.youtube.com/embed/pSi5tE3d5cw?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&modestbranding=1&rel=0`}
             title="Video de bienvenida"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -94,7 +92,7 @@ export const DashboardPage = () => {
         <div className="main-content">
           <div className="top-video-container">
             <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&controls=0&playlist=dQw4w9WgXcQ"
+              src="https://www.youtube.com/embed/pSi5tE3d5cw?autoplay=1&mute=1&loop=1&controls=0&playlist=pSi5tE3d5cw"
               title="Video destacado"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -255,6 +253,15 @@ export const DashboardPage = () => {
                     glowColor="132, 0, 255"
                   />
 
+                  <div className="student-message">
+                    <ShinyText
+                      text="Bienvenido a EducaGT, la plataforma para aprender a tu propio ritmo."
+                      disabled={false}
+                      speed={3}
+                      className="custom-class"
+                    />
+                  </div>
+                  
                    {role === "STUDENT" && (
                     <div
                       className="student-message"

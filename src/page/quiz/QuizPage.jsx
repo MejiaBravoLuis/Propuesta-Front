@@ -1,4 +1,3 @@
-// src/pages/QuizPage.jsx
 import React, { useEffect, useState } from "react";
 import {
   Spin,
@@ -11,7 +10,7 @@ import {
   Row,
   Col,
 } from "antd";
-import { useNavigate } from "react-router-dom";      // <-- hook al nivel superior
+import { useNavigate } from "react-router-dom";     
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 import AddIcon from "../../assets/icons/create.png";
 import EditIcon from "../../assets/icons/edit.png";
@@ -28,7 +27,7 @@ const { TextArea } = Input;
 
 export const QuizPage = () => {
   const { role } = useUserDetails();
-  const navigate = useNavigate();                      // <-- aquí
+  const navigate = useNavigate();         
   const {
     quizzes,
     loading,
@@ -168,7 +167,7 @@ export const QuizPage = () => {
                       <Button
                         type="primary"
                         size="small"
-                        onClick={() => navigate(`/cuestionariosD/${q._id}`)}
+                        onClick={() => navigate(`/cuestionariosD?quiz=/${q._id}`)}
                       >
                         Resolver
                       </Button>
