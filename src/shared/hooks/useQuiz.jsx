@@ -1,17 +1,33 @@
-import { useState } from "react";
+// src/shared/hooks/useQuiz.jsx
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   getAllQuizzes,
   getQuizById,
   createQuiz,
   updateQuiz,
-  deleteQuiz,
-  submitQuiz,
+  deleteQuiz as deleteQuizAPI,
+  submitQuiz as submitQuizAPI,
 } from "../../services/api";
 
 export const useQuiz = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const isMounted = useRef(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const safeSet = (setter) => (value) => {
+    if (isMounted.current) setter(value);
+  };
+  const _setQuizzes = safeSet(setQuizzes);
+  const _setLoading = safeSet(setLoading);
+  const _setError = safeSet(setError);
+
 
   const fetchAllQuizzes = async () => {
     setLoading(true);
@@ -26,80 +42,112 @@ export const useQuiz = () => {
     }
   };
 
-  const fetchQuizById = async (id) => {
-    setLoading(true);
-    setError(null);
+  const fetchQuizById = useCallback(async (id) => {
+    _setLoading(true);
+    _setError(null);
     try {
-      const quiz = await getQuizById(id);
-      return quiz;
+      const res = await getQuizById(id);          
+      return res.quiz ?? res;
     } catch (err) {
-      setError("Error fetching quiz");
+      _setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Error fetching quiz"
+      );
       throw err;
     } finally {
-      setLoading(false);
+      _setLoading(false);
     }
-  };
+  }, []);
 
-  const createNewQuiz = async (quizData) => {
-    setLoading(true);
-    setError(null);
+  const createNewQuiz = useCallback(async (quizData) => {
+    _setLoading(true);
+    _setError(null);
     try {
-      const newQuiz = await createQuiz(quizData);
-      setQuizzes((prev) => [...prev, newQuiz]);
+      const res = await createQuiz(quizData);      
+      const newQuiz = res.quiz;
+      _setQuizzes((prev) => [...prev, newQuiz]);
       return newQuiz;
     } catch (err) {
-      setError("Error creating quiz");
+      _setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Error creating quiz"
+      );
       throw err;
     } finally {
-      setLoading(false);
+      _setLoading(false);
     }
-  };
+  }, []);
 
-  const updateExistingQuiz = async (id, quizData) => {
-    setLoading(true);
-    setError(null);
+  const updateExistingQuiz = useCallback(async (id, quizData) => {
+    _setLoading(true);
+    _setError(null);
     try {
-      const updatedQuiz = await updateQuiz(id, quizData);
-      setQuizzes((prev) =>
+      const res = await updateQuiz(id, quizData);   
+      const updatedQuiz = res.quiz;
+      _setQuizzes((prev) =>
         prev.map((q) => (q._id === id ? updatedQuiz : q))
       );
       return updatedQuiz;
     } catch (err) {
-      setError("Error updating quiz");
+      _setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Error updating quiz"
+      );
       throw err;
     } finally {
-      setLoading(false);
+      _setLoading(false);
     }
-  };
+  }, []);
 
-  const deleteExistingQuiz = async (id) => {
-    setLoading(true);
-    setError(null);
+  const deleteExistingQuiz = useCallback(async (id) => {
+    _setLoading(true);
+    _setError(null);
     try {
-      await deleteQuiz(id);
-      setQuizzes((prev) => prev.filter((q) => q._id !== id));
+      await deleteQuizAPI(id);                      
+      _setQuizzes((prev) => prev.filter((q) => q._id !== id));
       return true;
     } catch (err) {
-      setError("Error deleting quiz");
+      _setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Error deleting quiz"
+      );
       return false;
     } finally {
-      setLoading(false);
+      _setLoading(false);
     }
-  };
+  }, []);
 
-  const submitQuizAnswers = async (quizId, answers) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await submitQuiz(quizId, { answers });
-      return response;
-    } catch (err) {
-      setError(err.message || "Error submitting quiz");
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+  const submitQuizAnswers = useCallback(
+    async (quizId, answersParam) => {
+      _setLoading(true);
+      _setError(null);
+      try {
+        const answersArray = Array.isArray(answersParam)
+          ? answersParam
+          : Object.entries(answersParam).map(([questionText, selected]) => ({
+              questionText,
+              selected,
+            }));
+
+        const res = await submitQuizAPI(quizId, { answers: answersArray });
+        return res;
+      } catch (err) {
+        _setError(
+          err.response?.data?.message ||
+          err.message ||
+          "Error submitting quiz"
+        );
+        throw err;
+      } finally {
+        _setLoading(false);
+      }
+    },
+    []
+  );
 
   return {
     quizzes,

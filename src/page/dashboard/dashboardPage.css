@@ -465,7 +465,11 @@ body {
 .profile-avatar:hover {
   transform: scale(1.05);
 }
+.custom-class{
+    margin-top:-100px;
 
+    background-color: #ffffff62;
+}
 .student-message {
   font-size: 2rem;
   margin-top: -50px;
