@@ -1,0 +1,96 @@
+.role-page-wrapper {
+  padding: 2rem;
+  background-color: var(--background-dark, #0f172a);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ffffff;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 900px;
+  background-color: var(--card-dark, #1e293b);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--primary-color, #38bdf8);
+  font-weight: 600;
+}
+
+/* Tabla */
+.ant-table {
+  background-color: transparent !important;
+}
+
+.ant-table-thead > tr > th {
+  background-color: #334155 !important;
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom: 1px solid #475569;
+}
+
+.ant-table-tbody > tr > td {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #334155;
+  transition: background-color 0.2s ease;
+}
+
+.ant-table-tbody > tr:hover > td,
+.ant-table-tbody > tr:active > td,
+.ant-table-tbody > tr.ant-table-row-selected > td {
+  background-color: #273449 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Select */
+.ant-select {
+  min-width: 140px;
+}
+
+.ant-select-selector {
+  background-color: #334155 !important;
+  border: 1px solid #475569 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease;
+}
+
+.ant-select-selector:hover {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
+}
+
+.ant-select-dropdown {
+  background-color: #1e293b !important;
+  border: none !important;
+}
+
+.ant-select-item-option {
+  color: #f1f5f9 !important;
+}
+
+.ant-select-item-option-active {
+  background-color: #3b4c66 !important;
+}
+
+/* Paginación */
+.ant-pagination-item {
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+  color: #f1f5f9 !important;
+}
+
+.ant-pagination-item-active {
+  background-color: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+  color: #0f172a !important;
+}

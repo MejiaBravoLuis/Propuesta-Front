@@ -12,6 +12,7 @@ import IconForos from "../../assets/icons/foros.png";
 import IconMaterial from "../../assets/icons/material.png";
 import IconStats from "../../assets/icons/stats.png";
 import IconLogout from "../../assets/icons/logout.png";
+import user from "../../assets/icons/4.png";
 
 const { Sider } = Layout;
 
@@ -27,6 +28,8 @@ const teacherMenuItems = [
 const adminMenuItems = [
   { key: "cursos",    label: "Cursos",       icon: <img src={IconCursos}  alt="" style={{ width: 20 }} /> },
   { key: "category", label: "Categorías", icon: <img src={IconCategoria} alt="" style={{ width: 20 }} /> },
+  { key: "asignar-roles", label: "Asignar Roles", icon: <img src={user} alt="" style={{ width: 20 }} /> },
+
   ...teacherMenuItems.slice(0, -1),
   teacherMenuItems[teacherMenuItems.length - 1],
 ];
