@@ -302,5 +302,14 @@ export const getUserProgress = async () => {
     return [];
   }
 };
+export const getAllUsers = async () => {
+  const res = await apiClient.get("/user");
+  return res.data;
+};
+
+export const updateUserRole = async (uid, role) => {
+  const res = await apiClient.put(`/user/change-role/${uid}`, { role });
+  return res.data;
+};
 
 export default apiClient;
