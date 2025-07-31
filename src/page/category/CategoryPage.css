@@ -1,0 +1,48 @@
+.category-page-content {
+  color: white;
+}
+
+.category-page-content h1,
+.category-page-content h3,
+.category-page-content p,
+.category-page-content .ant-input,
+.category-page-content .ant-textarea,
+.category-page-content .ant-select-selector,
+.category-page-content .ant-modal-body {
+  color: white;
+}
+
+.category-page-content .ant-modal {
+  background-color: #2c2c2c; 
+}
+
+.bottom-panel{
+    background-color: transparent;
+    position:static;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.category-page-content {
+  height: 100vh;
+  overflow: hidden;
+}
+.category-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.profile-avatar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+}

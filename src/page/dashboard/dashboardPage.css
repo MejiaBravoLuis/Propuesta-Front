@@ -1,10 +1,10 @@
 :root {
-  --primary-color: #3a86ff;
-  --secondary-color: #8338ec;
-  --accent-color: #ff006e;
-  --dark-bg: #121212;
-  --light-text: #ffffff;
-  --semi-transparent: rgba(255, 255, 255, 0.1);
+  --primary-color: #4FA3F7;           /* azul más educativo */
+  --secondary-color: #9823d7;         /* amarillo amigable */
+  --accent-color: #F76E6E;            /* rojo coral simpático */
+  --dark-bg: #05142f;                 /* azul profundo */
+  --light-text: #FFFFFF;
+  --semi-transparent: rgba(255, 255, 255, 0.07);
   --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
 }
 
@@ -18,9 +18,10 @@ body {
 
 .dashboard-wrapper {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto; 
 }
 
 .sidebar {
@@ -55,7 +56,7 @@ body {
 .main-content {
   margin-left: 80px;
   width: calc(100% - 80px);
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -183,16 +184,36 @@ body {
 }
 
 .dashboard-content-area {
-  width: 90%;
-  max-width: 1200px;
-  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.cards-and-stepper {
+  display: flex;
+  gap: 32px;
+  flex-wrap: nowrap; /* evita que baje el stepper debajo */
+  align-items: flex-start;
+  justify-content: flex-start; /* alinea al inicio */
+  padding: 20px;
+  max-width: 1200px; /* opcional */
+  margin: 0 auto; /* centra horizontalmente */
 }
 
 .info-cards {
   display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+  gap: 10px;
+  flex-wrap: nowrap;
+  justify-content: flex-start; /* mejor alineado a la izquierda */
+  flex: 2; /* que ocupe más espacio que el stepper */
+}
+
+.stepper-container {
+  flex: 1;
+  min-width: 300px;
+  margin-top: 860px; /* espacio extra arriba */
 }
 
 .info-card {
@@ -425,4 +446,45 @@ body {
   .info-card {
     width: 100%;
   }
+}
+
+.profile-avatar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+}
+
+.student-message {
+  font-size: 2rem;
+  margin-top: -50px;
+  padding: 1px;
+  background-color: transparent;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.student-message-f{
+    font-size: 2rem;
+  margin-top: 1200px;
+  padding: 1px;
+  background-color: #ffffff62;
+  border-radius: 8px;
+  text-align: center;
+}
+.student-message h2 {
+  font-size: 2rem;
+  color: #ffffff;
+  line-height: 1.6;
 }
