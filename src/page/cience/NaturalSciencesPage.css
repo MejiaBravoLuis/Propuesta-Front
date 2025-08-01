@@ -20,7 +20,6 @@
   font-size: 2.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, #11998e, #38ef7d); /* verde natural */
-  -webkit-background-clip: text;
   color: transparent;
   margin-bottom: 1rem;
 }

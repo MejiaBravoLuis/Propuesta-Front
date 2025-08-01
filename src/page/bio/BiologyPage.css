@@ -20,7 +20,6 @@
   font-size: 2.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, #43cea2, #185a9d); /* Verde/Azul */
-  -webkit-background-clip: text;
   color: transparent;
   margin-bottom: 1rem;
 }

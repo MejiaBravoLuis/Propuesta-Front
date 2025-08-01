@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {Sidebar} from "../../components/Sidebar/Sidebar";
 import ProfileImage from "../../assets/img/ye.png";
 import { UserProfileModal } from "../../components/UserProfileModal";
-import "./languagePage.css";
 
 export const LanguagePage = () => {
   const [user, setUser] = useState(null);
