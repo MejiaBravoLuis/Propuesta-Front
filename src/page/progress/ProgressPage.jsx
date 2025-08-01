@@ -4,7 +4,7 @@ import ProfileImage from "../../assets/img/ye.png";
 import { UserProfileModal } from "../../components/UserProfileModal";
 import ReactApexChart from "react-apexcharts";
 import { useProgressSummary } from "../../shared/hooks/useProgressSumary";
-import "./progressPage.css";
+import "./ProgressPage.css";
 
 export const ProgressPage = () => {
   const [user, setUser] = useState(null);
