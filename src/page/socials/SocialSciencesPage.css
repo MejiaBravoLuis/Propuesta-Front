@@ -20,7 +20,6 @@
   font-size: 2.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, #b24592, #f15f79); /* burdeo-rosado */
-  -webkit-background-clip: text;
   color: transparent;
   margin-bottom: 1rem;
 }
