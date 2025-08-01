@@ -39,8 +39,8 @@ export const DashboardPage = () => {
     setShowWelcomeVideo(false);
     sessionStorage.setItem("welcomeVideoViewed", "true");
   };
-  const toggleMute = () => setIsMuted(m => !m);
-  const toggleNarrador = () => setNarradorActivo(a => !a);
+  const toggleMute = () => setIsMuted((m) => !m);
+  const toggleNarrador = () => setNarradorActivo((a) => !a);
 
   const leerTexto = (texto) => {
     if (narradorActivo && "speechSynthesis" in window) {
@@ -57,7 +57,9 @@ export const DashboardPage = () => {
         <div className="welcome-video-overlay">
           <iframe
             ref={videoRef}
-            src={`https://www.youtube.com/embed/pSi5tE3d5cw?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&modestbranding=1&rel=0`}
+            src={`https://www.youtube.com/embed/6pnKlAtALlU?autoplay=1&mute=${
+              isMuted ? 1 : 0
+            }&controls=0&modestbranding=1&rel=0&loop=1&playlist=6pnKlAtALlU`}
             title="Video de bienvenida"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -92,20 +94,18 @@ export const DashboardPage = () => {
         <div className="main-content">
           <div className="top-video-container">
             <iframe
-              src="https://www.youtube.com/embed/pSi5tE3d5cw?autoplay=1&mute=1&loop=1&controls=0&playlist=pSi5tE3d5cw"
+              src="https://www.youtube.com/embed/6pnKlAtALlU?autoplay=1&mute=1&loop=1&controls=0&playlist=6pnKlAtALlU"
               title="Video destacado"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="featured-video"
             />
-            
+
             <div
               className={`welcome-message-overlay ${
                 textAnimation ? "animated" : ""
-                
-              }`
-            }
+              }`}
             >
               <h1 className="dashboard-title">
                 <span
@@ -152,20 +152,25 @@ export const DashboardPage = () => {
                 <div className="stepper-container">
                   <Stepper
                     initialStep={1}
-                    onStepChange={(step) => {
-                    }}
+                    onStepChange={(step) => {}}
                     onFinalStepCompleted={() =>
                       console.log("All steps completed!")
                     }
                     backButtonText={
-                      <span onMouseEnter={() => leerTexto("Regresar")}>Regresar</span>
+                      <span onMouseEnter={() => leerTexto("Regresar")}>
+                        Regresar
+                      </span>
                     }
                     nextButtonText={
-                      <span onMouseEnter={() => leerTexto("Siguiente")}>Siguiente</span>
+                      <span onMouseEnter={() => leerTexto("Siguiente")}>
+                        Siguiente
+                      </span>
                     }
                   >
                     <Step>
-                      <h2 onMouseEnter={() => leerTexto("¡Bienvenido a EducaGT!")}>
+                      <h2
+                        onMouseEnter={() => leerTexto("¡Bienvenido a EducaGT!")}
+                      >
                         ¡Bienvenido a EducaGT!
                       </h2>
                       <p
@@ -261,8 +266,8 @@ export const DashboardPage = () => {
                       className="custom-class"
                     />
                   </div>
-                  
-                   {role === "STUDENT" && (
+
+                  {role === "STUDENT" && (
                     <div
                       className="student-message"
                       onMouseEnter={() =>
@@ -298,7 +303,14 @@ export const DashboardPage = () => {
         />
       </div>
 
-      <div style={{ position: "fixed", bottom: "120px", right: "20px", zIndex: 1000 }}>
+      <div
+        style={{
+          position: "fixed",
+          bottom: "120px",
+          right: "20px",
+          zIndex: 1000,
+        }}
+      >
         <button className="mute-button" onClick={toggleNarrador}>
           {narradorActivo ? "🔊 Narrador On" : "🔇 Narrador Off"}
         </button>

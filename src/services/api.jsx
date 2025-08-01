@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:33/Propuesta/v1/",
+  baseURL: "https://propuesta-backend.onrender.com/Propuesta/v1/",
   timeout: 5000,
 });
 
@@ -40,7 +40,7 @@ export const register = async (data) => {
 export const getAllCategories = async () => {
   try {
     const response = await apiClient.get("category");
-    return response.data; 
+    return response.data;
   } catch (e) {
     console.error("Error fetching categories:", e);
     return { error: true, e };
@@ -51,7 +51,7 @@ export const getAllCategories = async () => {
 export const createCategory = async (data) => {
   try {
     const response = await apiClient.post("category", data);
-    return response.data; 
+    return response.data;
   } catch (e) {
     console.error("Error creating category:", e);
     return { error: true, e };
@@ -263,7 +263,10 @@ export const createQuiz = async (data) => {
     return response.data.quiz;
   } catch (error) {
     console.error("Error creating quiz:", error);
-    console.error("Error creating quiz:", error.response?.data || error.message);
+    console.error(
+      "Error creating quiz:",
+      error.response?.data || error.message
+    );
 
     throw error;
   }
@@ -302,6 +305,17 @@ export const getUserProgress = async () => {
     return [];
   }
 };
+
+export const getProgressSummary = async (userId) => {
+  try {
+    const res = await apiClient.get(`/progress/user/${userId}/summary`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching progress summary:", error);
+    return { error: true };
+  }
+};
+
 export const getAllUsers = async () => {
   const res = await apiClient.get("/user");
   return res.data;

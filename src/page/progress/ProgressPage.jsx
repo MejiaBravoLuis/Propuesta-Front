@@ -3,12 +3,13 @@ import { Sidebar } from "../../components/Sidebar/Sidebar";
 import ProfileImage from "../../assets/img/ye.png";
 import { UserProfileModal } from "../../components/UserProfileModal";
 import ReactApexChart from "react-apexcharts";
-import { useProgress } from "../../shared/hooks/useProgress";
+import { useProgressSummary } from "../../shared/hooks/useProgressSumary";
 import "./progressPage.css";
 
 export const ProgressPage = () => {
   const [user, setUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const { summary, loading } = useProgressSummary();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -17,21 +18,11 @@ export const ProgressPage = () => {
     }
   }, []);
 
-  const { progress, loading } = useProgress();
-
-  // 📊 Simulación de datos de progreso por curso
-  const categories = {};
-  progress.forEach((p) => {
-    const name = p.material?.category?.name || "Otro";
-    if (!categories[name]) categories[name] = { total: 0, completed: 0 };
-    categories[name].total += 1;
-    if (p.completed) categories[name].completed += 1;
-  });
-
-  const chartLabels = Object.keys(categories);
-  const chartSeries = Object.values(categories).map((c) =>
-    Math.round((c.completed / c.total) * 100)
-  );
+  const chartLabels = ["Materiales", "Quizzes"];
+  const chartSeries = summary ? [
+    Math.round(summary.materialProgress),
+    Math.round(summary.quizProgress)
+  ] : [];
 
   return (
     <div className="dashboard-wrapper">
@@ -39,30 +30,41 @@ export const ProgressPage = () => {
       <div className="main-content">
         <h1>Mi Progreso</h1>
         <p>
-          Aquí podrás visualizar tu avance en las distintas materias y cursos.
-          Monitorea tus logros, recibe recomendaciones personalizadas y
-          planifica tus próximos pasos.
+          Visualiza tu avance general en EducaGT. Este progreso se calcula en base a los materiales y quizzes completados.
         </p>
 
-        <div style={{ maxWidth: 600, margin: "40px auto" }}>
-          <ReactApexChart
-            options={{
-              chart: { type: "radialBar" },
-              labels: chartLabels,
-              plotOptions: {
-                radialBar: {
-                  dataLabels: {
-                    name: { fontSize: "20px" },
-                    value: { fontSize: "16px" },
+        {loading ? (
+          <p style={{ textAlign: "center" }}>Cargando progreso...</p>
+        ) : summary ? (
+          <div style={{ maxWidth: 600, margin: "40px auto" }}>
+            <ReactApexChart
+              options={{
+                chart: { type: "radialBar" },
+                labels: chartLabels,
+                plotOptions: {
+                  radialBar: {
+                    dataLabels: {
+                      name: { fontSize: "20px" },
+                      value: { fontSize: "16px" },
+                    },
                   },
                 },
-              },
-            }}
-            series={chartSeries}
-            type="radialBar"
-            height={350}
-          />
-        </div>
+              }}
+              series={chartSeries}
+              type="radialBar"
+              height={350}
+            />
+
+            <div className="progress-details">
+              <p>Total de materiales: {summary.totalMaterials}</p>
+              <p>Completados: {summary.completedMaterials}</p>
+              <p>Total de quizzes: {summary.totalQuizzes}</p>
+              <p>Completados: {summary.completedQuizzes}</p>
+            </div>
+          </div>
+        ) : (
+          <p style={{ textAlign: "center" }}>No se pudo cargar el progreso.</p>
+        )}
       </div>
 
       <img
